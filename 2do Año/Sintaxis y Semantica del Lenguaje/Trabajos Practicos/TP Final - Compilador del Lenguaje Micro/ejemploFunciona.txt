@@ -1,0 +1,7 @@
+inicio
+    leer (a,b);
+    c := a+b;
+    d := b-a;
+    e := a-b;
+    escribir (a, (a+b));
+fin

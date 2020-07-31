@@ -1,0 +1,5 @@
+inicio
+leer (a,b);
+c := a + b+10;
+escribir (c);
+fin

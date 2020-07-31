@@ -1,0 +1,276 @@
+import vehiculo.*
+import motor.*
+import rueda.*
+import piloto.*
+import escuderia.*
+import pista.*
+
+/* Escuderias */
+const ferrari = new Escuderia(nombre = "Scuderia Ferrari", reservaDeNitro = 4)
+const mercedes = new Escuderia(nombre = "AMG Mercedes-Benz", reservaDeNitro = 0)
+const mcLaren = new Escuderia(nombre = "McLaren", reservaDeNitro = 1)
+
+/* Tipos de Motores */
+const normal = new Normal()
+const wankel = new Wankel(vidaUtilDeSellosApex = 49)
+const turbo = new Turbo(presionTurbo = 10)
+const vinDiesel = new VinDiesel(carrerasDeUso = 120, kilometrosRecorridos = 9900)
+const nitroso = new Nitroso(escuderiaDuenia = ferrari)
+const combinado = new Combinado()
+
+/* Motores */
+const s14b23 = new Motor(tipo = normal, cilindrada = 2300, cilindros = 4, presionMedia = 400, rpm = 10000)
+const r26b = new Motor(tipo = wankel, cilindrada = 654, cilindros = 4, presionMedia = 600, rpm = 12000)
+const ej20 = new Motor(tipo = turbo, cilindrada = 2000, cilindros = 4, presionMedia = 200, rpm = 6800)
+const om617D30 = new Motor(tipo = vinDiesel, cilindrada = 3005, cilindros = 5, presionMedia = 300, rpm = 4000)
+const motorNitroso = new Motor(tipo = nitroso, cilindrada = 2300, cilindros = 4, presionMedia = 400, rpm = 10000)
+const motorCombinado = new Motor(tipo = combinado, cilindrada = 2300, cilindros = 4, presionMedia = 400, rpm = 10000)
+
+/* Ruedas */
+//Hago un generador de ruedas para los autos
+object generadorDeRuedas {
+	//Ponemos una fecha actual por defecto para que se calculen los tests en base a esas fechas (similar a un objecto stub)
+	method ruedaSlik(estaVigente){
+		if(estaVigente) return new Slik(fechaDeFabricacion = new Date(day = 22, month = 6, year = 2018))
+		else return new Slik(fechaActual = new Date(day = 14, month = 11, year = 2019), fechaDeFabricacion = new Date(day = 12, month = 2, year = 2015))
+	}
+	method ruedaRadial(estaVigente){
+		if(estaVigente) return new Radial(fechaActual = new Date(day = 14, month = 11, year = 2019), fechaDeFabricacion = new Date(day = 2, month = 9, year = 2018))
+		else return new Radial(fechaActual = new Date(day = 14, month = 11, year = 2019), fechaDeFabricacion = new Date(day = 3, month = 12, year = 2003))
+	}
+	method ruedaDeNieve() { return new Nieve(fechaActual = new Date(day = 14, month = 11, year = 2019), fechaDeFabricacion = new Date(day = 7, month = 4, year = 2016)) }
+}
+
+/* Vehiculos */
+const e30 = new Vehiculo(escuderia = ferrari, motor = s14b23, cubiertas = [generadorDeRuedas.ruedaRadial(true), generadorDeRuedas.ruedaRadial(true), generadorDeRuedas.ruedaRadial(true), generadorDeRuedas.ruedaRadial(true)], peso = 883.2)
+const flechaDePlata = new Vehiculo(escuderia = ferrari, motor = om617D30, cubiertas = [generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true)],  peso = 1000)
+const impreza = new Vehiculo(escuderia = ferrari, motor = ej20, cubiertas = [generadorDeRuedas.ruedaSlik(false), generadorDeRuedas.ruedaSlik(false), generadorDeRuedas.ruedaSlik(false), generadorDeRuedas.ruedaSlik(true)], peso = 990)
+const _787b = new Vehiculo(escuderia = ferrari, motor = r26b, cubiertas = [generadorDeRuedas.ruedaDeNieve(), generadorDeRuedas.ruedaDeNieve(), generadorDeRuedas.ruedaDeNieve(), generadorDeRuedas.ruedaDeNieve()], peso = 830)
+
+/* Pilotos */
+const traverso = new Piloto(nombre = "Juan Maria Traverso", vehiculo = e30, estiloDeConduccion = new Audaz(tiempoDeCurva = 1))
+const fangio = new Piloto(nombre = "Juan Manuel Fangio", vehiculo = flechaDePlata, estiloDeConduccion = new Virtuoso(nivelDeVirtuosismo = 5))
+const mcRae = new Piloto(nombre = "Colin McRae", vehiculo = impreza, estiloDeConduccion = cabulero)
+const herbert = new Piloto(nombre = "Jhonny Herbert", vehiculo = _787b, estiloDeConduccion = seguidor)
+
+/* Pistas */
+const stubImpar = new Pista(nombre = "Bahrein", cantidadDeCurvas = 8, largoPorVuelta = 4.6)
+const stubPar = new Pista(nombre = "Monaco", cantidadDeCurvas = 10, largoPorVuelta = 2.1)
+const rafaela = new Pista(nombre = "Rafaela", cantidadDeCurvas = 8, largoPorVuelta = 4.6, cantidadDeVueltas = 50)
+const galvez = new Pista(nombre = "Hermanos Galvez", cantidadDeCurvas = 10, largoPorVuelta = 2.1, cantidadDeVueltas = 10) 
+
+/* TESTS */
+describe "Tests de los Motores" {
+	
+	/* Motor S14B23 */
+	test "El motor S14B23 tiene 368HP de potencia" {
+		assert.equals(368, s14b23.potencia())
+	}
+	test "El motor S14B23 recorre 10km y se queda con 4,9L de aceite" {
+		s14b23.usar(10)
+		assert.equals(4.9, s14b23.aceite())
+	}
+	test "El motor S14B23 recorre 10km y tiene 390 de presion media de trabajo" {
+		s14b23.usar(10)
+		assert.equals(390, s14b23.presionMedia())
+	}
+	/* Motor R26B */
+	test "El motor R26B recorre 10km y el grado de desgaste de los sellos Apex queda en 48%" {
+		r26b.usar(10)
+		assert.equals(48, r26b.tipo().vidaUtilDeSellosApex())
+	}
+	/* Motor EJ20 */
+	test "El motor EJ20 tiene 288,8HP de potencia" {
+		assert.equals(288.8, ej20.potencia())
+	}
+	/* Motor OM617D30 */
+	test "El motor OM617D30 mantiene el aceite al usarse, ya que es su carrera numero 121 y es impar" {
+		om617D30.usar(10)
+		assert.equals(5, om617D30.aceite())
+	}
+	test "El motor OM617D30 disminuye su aceite al usarse luego de usarse en 2 carreras" {
+		om617D30.usar(490)
+		om617D30.usar(10)
+		assert.equals(4.8, om617D30.aceite())
+	}
+	test "El motor OM617D30 recorre 490km y 10km y tiene una presion media de trabajo de 260" {
+		om617D30.usar(490)
+		om617D30.usar(10)
+		assert.equals(260, om617D30.presionMedia())
+	}
+	/* Motor Nitroso */
+	test "El motor nitroso tiene una potencia de 568HP ya que posee 3L de nitro en la reserva" {
+		assert.equals(568, motorNitroso.potencia())
+	}
+	test "El motor nitroso es comprado por Mercedes que no tiene reserva de nitro, por lo tanto su potencia es de 368HP" {
+		motorNitroso.tipo().escuderiaDuenia(mercedes)
+		assert.equals(368, motorNitroso.potencia())
+	}
+	test "El motor nitroso es comprado por McLaren y se utiliza sin el nitro, ya que no le alcanza la reserva" {
+		motorNitroso.tipo().escuderiaDuenia(mcLaren)
+		assert.equals(1, motorNitroso.tipo().escuderiaDuenia().reservaDeNitro())
+	}
+	test "El motor nitroso es utilizado y disminuye a 2 la reserva de nitro"{
+		motorNitroso.usar(100)
+		assert.equals(2, motorNitroso.tipo().escuderiaDuenia().reservaDeNitro())
+	}
+	/* Motor Combinado */
+	test "El motor combinado sin ningun motor que lo integre suma una potencia base de 368HP"{
+		assert.equals(368, motorCombinado.potencia())
+	}
+	test "El motor combinado compuesto por un motor Wankel y un motor Turbo suma una potencia total de 548HP"{
+		motorCombinado.tipo().insertarMotor(r26b)
+		motorCombinado.tipo().insertarMotor(ej20)
+		assert.equals(548, motorCombinado.potencia())
+	}
+	test "El motor combinado compuesto por un motor OM617D30 y un motor S14B23 es usado 10km se desgastan los componentes de los mismos (Aceite)"{
+		motorCombinado.tipo().insertarMotor(om617D30)
+		motorCombinado.tipo().insertarMotor(s14b23)
+		motorCombinado.usar(10)
+		assert.that((om617D30.aceite() == 5) && (s14b23.aceite() == 4.9))
+	}
+	test "El motor combinado compuesto por un motor OM617D30 y un motor S14B23 es usado 10km se desgastan los componentes de los mismos (Presion Media)"{
+		motorCombinado.tipo().insertarMotor(om617D30)
+		motorCombinado.tipo().insertarMotor(s14b23)
+		motorCombinado.usar(10)
+		assert.that((om617D30.presionMedia() == 295) && (s14b23.presionMedia() == 390))
+	}
+	test "El motor combinado compuesto por un motor OM617D30 y un motor S14B23 esta palmado porque el S14B23 esta palmado"{
+		motorCombinado.tipo().insertarMotor(om617D30)
+		motorCombinado.tipo().insertarMotor(s14b23)
+		motorCombinado.usar(15000)
+		assert.that(motorCombinado.estaPalmado())
+	}
+	test "El motor combinado compuesto por un motor OM617D30 y un motor S14B23 remueve el S1423B y no esta palmado"{
+		motorCombinado.tipo().insertarMotor(om617D30)
+		motorCombinado.tipo().insertarMotor(s14b23)
+		motorCombinado.usar(15000)
+		motorCombinado.tipo().eliminarMotor(s14b23)
+		assert.notThat(motorCombinado.estaPalmado())
+	}
+}
+
+describe "Tests de las Ruedas" {
+	
+	test "La rueda slick con vencimiento vigente es óptima" {
+		assert.that(generadorDeRuedas.ruedaSlik(true).estaOptima())
+	}
+	test "La rueda slick sin vencimiento vigente no es óptima" {
+		assert.notThat(generadorDeRuedas.ruedaSlik(false).estaOptima())
+	}
+	test "Uso la rueda slick con vencimiento vigente por 21km y ya no es optima" {
+		var rueda = generadorDeRuedas.ruedaSlik(true)
+		rueda.usar(21)
+		assert.notThat(rueda.estaOptima())
+	}
+	test "Uso la rueda slick sin vencimiento vigente por 10km y su profundidad de dibujo es de 1.5mm" {
+		var rueda = generadorDeRuedas.ruedaSlik(false)
+		rueda.usar(10)
+		assert.equals(1.5, rueda.profundidadDeDibujo())
+	}
+	test "Uso la rueda radial sin vencimiento vigente por 100km y su profundidad de dibujo es de 1.9mm" {
+		var rueda = generadorDeRuedas.ruedaRadial(false)
+		rueda.usar(100)
+		assert.equals(1.9, rueda.profundidadDeDibujo())
+	}
+	test "La rueda radial sin vencimiento vigente no es óptima" {
+		assert.notThat(generadorDeRuedas.ruedaRadial(false).estaOptima())
+	}
+	test "Uso la rueda radial con vencimiento vigente por 500km y ya no es optima" {
+		var rueda = generadorDeRuedas.ruedaRadial(true)
+		rueda.usar(500)
+		assert.notThat(rueda.estaOptima())
+	}
+	test "Uso la rueda de nieve por 1000km y sigue siendo optima" {
+		var rueda = generadorDeRuedas.ruedaDeNieve()
+		rueda.usar(1000)
+		assert.that(rueda.estaOptima())
+	}
+	test "Uso la rueda de nieve por 1000km y no pierde profundidad de dibujo" {
+		var rueda = generadorDeRuedas.ruedaDeNieve()
+		rueda.usar(1000)
+		assert.equals(2, rueda.profundidadDeDibujo())
+	}
+	
+}
+
+describe "Tests de los Pilotos" {
+
+	test "Traverso tarda 36.8 segundos en el circuito de Bahrein" {
+		assert.equals(36.8, traverso.tiempoDePista(stubImpar))
+	}
+	test "McRae tarda 41.4 segundos en el circuito de Bahrein" {
+		assert.equals(41.4, mcRae.tiempoDePista(stubImpar))
+	}
+	test "McRae tarda 21 segundos en el circuito de Monaco" {
+		assert.equals(21, mcRae.tiempoDePista(stubPar))
+	}
+	test "Fangio tarda 12.6 segundos en el circuito de Monaco" {
+		assert.equals(12.6, fangio.tiempoDePista(stubPar))
+	}
+	test "Herbert tarda 12.6 segundos en el circuito de Monaco, ya que es un seguidor y el estilo de moda es ser virtuoso con 5 de nivel de virtuosismo" {
+		//Establezco como estilo de moda para los seguidores a los pilotos Virtuosos
+		estiloDeModa.estilo(new Virtuoso(nivelDeVirtuosismo = 5))
+		assert.equals(12.6, herbert.tiempoDePista(stubPar))
+	}
+	test "El E30 tarda 40.32 segundos en el circuito de Monaco" {
+		assert.equals(40.32, e30.tiempoDePista(stubPar))
+	}
+	test "El tiempo total de pista de Traverso en Bahrein es de 125.12 segundos" {
+		assert.equals(125.12, traverso.tiempoTotalDePista(stubImpar))
+	}
+
+}
+
+describe "Tests de las Pistas" {
+	
+	test "McRae no se puede inscribir en el circuito de Rafaela porque a su vehiculo no le alcanzan las cubiertas óptimas" {
+		assert.throwsExceptionWithMessage("Tu vehiculo debe contener al menos 3 cubiertas optimas para poder competir!", {rafaela.inscribirPiloto(mcRae)})
+	}
+	test "Fangio no se puede inscribir en el circuito de Rafaela porque a su vehiculo le falta aceite" {
+		const om617D30_sinAceite = new Motor(tipo = vinDiesel, cilindrada = 3005, cilindros = 5, presionMedia = 300, rpm = 4000, aceite = 0)
+		const flechaDePlata_sinAceite = new Vehiculo(escuderia = ferrari, motor = om617D30_sinAceite, cubiertas = [generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true)],  peso = 1000)
+		const fangio2 = new Piloto(nombre = "Juan Manuel Fangio", vehiculo = flechaDePlata_sinAceite, estiloDeConduccion = new Virtuoso(nivelDeVirtuosismo = 5))
+		assert.throwsExceptionWithMessage("El motor de tu vehiculo esta fundido! Revisa que tu nivel de aceite sea mayor a 1L", {rafaela.inscribirPiloto(fangio2)})
+	}
+	test "Fangio no se puede inscribir en el circuito de Rafaela porque a su vehiculo le falta presion media" {
+		const om617D30_sinPresionMedia = new Motor(tipo = vinDiesel, cilindrada = 3005, cilindros = 5, presionMedia = 0, rpm = 4000)
+		const flechaDePlata_sinPresionMedia = new Vehiculo(escuderia = ferrari, motor = om617D30_sinPresionMedia, cubiertas = [generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true)],  peso = 1000)
+		const fangio2 = new Piloto(nombre = "Juan Manuel Fangio", vehiculo = flechaDePlata_sinPresionMedia, estiloDeConduccion = new Virtuoso(nivelDeVirtuosismo = 5))
+		assert.throwsExceptionWithMessage("El motor de tu vehiculo esta fundido! Revisa que tu presion media sea mayor a 0", {rafaela.inscribirPiloto(fangio2)})
+	}
+	test "Herbert no puede inscribirse en el circuito de Rafaela porque su vehiculo no alcanza el porcentaje minimo de sellos apex" {
+		assert.throwsExceptionWithMessage("La vida util de los sellos Apex de tu motor tiene un porcentaje menor al 50%", {rafaela.inscribirPiloto(herbert)})
+	}
+	test "Fangio no se puede inscribir en el circuito de Rafaela porque a su vehiculo le falta potencia" {
+		const om617D30_presionMedia100 = new Motor(tipo = vinDiesel, cilindrada = 3005, cilindros = 5, presionMedia = 100, rpm = 4000)
+		const flechaDePlata_presionMedia100 = new Vehiculo(escuderia = ferrari, motor = om617D30_presionMedia100, cubiertas = [generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true)],  peso = 1000)
+		const fangio2 = new Piloto(nombre = "Juan Manuel Fangio", vehiculo = flechaDePlata_presionMedia100, estiloDeConduccion = new Virtuoso(nivelDeVirtuosismo = 5))
+		assert.throwsExceptionWithMessage("La potencia de tu motor es muy baja! Asegurate de que tenga al menos 100HP", {rafaela.inscribirPiloto(fangio2)})
+	}
+	test "Fangio corre en el circuito Hermanos Galvez y su auto termina sin funcionar" {
+		galvez.inscribirPiloto(fangio)
+		galvez.correr()
+		assert.notThat(fangio.vehiculo().funciona())
+	}
+	test "Fangio y Traverso corren en el circuito Hermanos Galvez y la carrera no termino joya" {
+		galvez.inscribirPiloto(fangio)
+		galvez.inscribirPiloto(traverso)
+		galvez.correr()
+		assert.notThat(galvez.carreraSinProblemas())
+	}
+	test "Fangio y Traverso corren en el circuito Hermanos Galvez, el auto mas potente es el E30 de Traverso" {
+		galvez.inscribirPiloto(fangio)
+		galvez.inscribirPiloto(traverso)
+		assert.equals(e30, galvez.autoMasPotente())
+	}
+	test "Fangio, Traverso y McRae corren en el circuito Hermanos Galvez, gana Traverso, segundo McRae y tercero Fangio" {
+		const impreza_cubiertasOptimas = new Vehiculo(escuderia = ferrari, motor = ej20, cubiertas = [generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true), generadorDeRuedas.ruedaSlik(true)], peso = 990)
+		const mcRae2 = new Piloto(nombre = "Colin McRae", vehiculo = impreza_cubiertasOptimas, estiloDeConduccion = cabulero)					 			  			   
+		galvez.inscribirPiloto(fangio)
+		galvez.inscribirPiloto(traverso)
+		galvez.inscribirPiloto(mcRae2)
+		assert.equals([traverso, mcRae2, fangio], galvez.podio())
+	}
+	
+}
