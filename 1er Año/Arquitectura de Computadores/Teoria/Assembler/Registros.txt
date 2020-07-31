@@ -1,0 +1,33 @@
+AH: 8bits mas significativos del registro
+AL: 8bits menos significativos del registro
+
+REGISTROS DE DATOS:
+AX (acumulador): almacena el resultado de las operaciones
+BX (registro base): almacena direccion base para accesos a memoria
+CX (contador): actua como contador en bucles de repeticion
+DX (datos): almacena datos de operaciones
+
+REGISTROS DE SEGMENTO:
+CS (segmento de codigo): contiene el valor de segmento donde se encuentra el codigo
+DS (segmento de datos): contiene el segmento donde estan los datos
+ES (segmento extra de datos): accede a otro segmento con mas datos
+SS (segmento de pila): valor del segmento en donde esta la pila
+
+REGISTROS DE INDICE:
+IP (indice de programa): almacena el desplazamiento dentro del segmento de codigo. Junto con CS apunta a la direccion de la proxima instruccion.
+SI (indice de origen): almacena el desplazamiento del operando de origen en memoria en algunas operaciones
+DI (indice de destino): almacena el desplazamiento del operando de destino en memoria en algunas operaciones
+SP (indice de pila): almacena el desplazamiento dentro del segmento de la pila y apunta al ultimo elemento que fue introducido. Se utiliza junto con SS
+BP (indice de base): almacena el desplazamiento entre distintos segmentos
+
+REGISTROS DE ESTADO (BANDERAS):
+OF (desbordamiento): indicador de error. Se pone en 1 cuando la operacion excede los 16 bits o en un cambio de signo en un desplazamiento
+DF (direccion en operaciones con cadenas): vale 1 cuando se recorre la cadena de izquierda a derecha
+IF (indicador de interrupcion): vale 1 si se permite reconocimiento de interrupciones
+TF (modo traza): vale 1 si se ejecuta paso por paso. Usado en fase de depuracion
+SF (indicador de signo): vale 1 cuando la operacion da resultado negativo
+ZF (indicador de cero): vale 1 cuando la operacion da resultado cero
+AF (acarreo auxiliar): vale 1 cuando hay acarreo en el bit 3
+PF (paridad): vale 1 cuando la suma de unos de la operacion da par
+CF (bit de acarreo): vale 1 cuando hay acarreo en la operacion
+

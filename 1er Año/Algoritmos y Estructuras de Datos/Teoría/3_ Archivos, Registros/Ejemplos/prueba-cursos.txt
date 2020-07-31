@@ -1,0 +1,6 @@
+Curso 1
+Especialidad: Sistemas		Codigo: K1094		Alumnos: 24
+
+Curso 2
+Especialidad: Quimica		Codigo: Q1011		Alumnos: 10
+

@@ -1,0 +1,9 @@
+MOV AX,BX		 Direccionamiento de Registro
+MOV AX,204		 Direccionamiento Inmediato
+MOV AX,[10]		 Direccionamiento Directo (valor de la posicion de memoria DS:10).
+MOV AX,TABLA		 Direccionamiento Directo
+MOV AX,[BX]		 Direccionamiento Indirecto mediante Registro (DS:[BX])
+MOV AX,[BX]+2		 Direccionamiento por Registro Base (valor en la posicion de memoria+2)
+MOV AX,TABLA[DI] 	 Direccionamiento Indexado (valor de tabla sumado al contenido de DI)
+MOV AX,TABLA[DI][BX] 	 Direccionamiento Indexado respecto de una base (valor de tabla sumado al contenido de DI y BX)
+Si el operando se deduce Direccionamiento Implicito
