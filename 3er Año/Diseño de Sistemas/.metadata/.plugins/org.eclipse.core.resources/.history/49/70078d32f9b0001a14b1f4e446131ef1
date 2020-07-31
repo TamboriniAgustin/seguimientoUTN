@@ -1,0 +1,22 @@
+package Moneda;
+import Moneda.CodigoMoneda;
+import Compra.RepositorioDeMonedasMock;
+import Repositorios.RepositorioDeMonedas.*;
+import Usuario.Usuario;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+public class TestMoneda {
+	@Test()
+    public void repositorioDeMonedasMeli() {
+		Moneda monedaEsperada = new Moneda(CodigoMoneda.ARS, "Peso Argentino");
+		RepositorioDeMonedasMeli repositorio = new RepositorioDeMonedasMeli();
+		Moneda monedaObtenida = repositorio.getMoneda(CodigoMoneda.ARS);
+		
+		boolean coincideDescripcion = monedaObtenida.getDescripcion() == monedaEsperada.getDescripcion();
+		boolean coincideCodigo = monedaObtenida.getCodigo() == monedaEsperada.getCodigo();
+		Assert.assertTrue(coincideDescripcion && coincideCodigo);
+    }
+}

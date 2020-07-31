@@ -1,0 +1,5 @@
+package Repositorios.RepositorioDeLocaciones;
+
+public class UsuarioYaExisteException extends RuntimeException {
+
+}

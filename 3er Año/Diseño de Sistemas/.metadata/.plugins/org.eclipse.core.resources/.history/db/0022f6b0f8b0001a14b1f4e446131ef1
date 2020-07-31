@@ -1,0 +1,23 @@
+package Moneda;
+import Moneda.CodigoMoneda;
+import Compra.RepositorioDeMonedasMock;
+import Repositorios.RepositorioDeMonedas.*;
+import Usuario.Usuario;
+
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class TestMoneda {
+	@Before
+	public void inits() {
+		
+	}
+	
+	@Test()
+    public void repositorioDeMonedasMeli() {
+		RepositorioDeMonedasMeli repositorio = new RepositorioDeMonedasMeli();
+		repositorio.getMoneda(CodigoMoneda.ARS);
+    }
+}
