@@ -1,0 +1,32 @@
+htons() -> host to network short
+htonl() -> host to network long
+ntohs() -> network to host short
+ntohl() -> network to host long
+inet_pton() -> Convierte una dirección IP en puntos a su struct correspondiente, especificando si es ed tipo AF_INET (IPv4) o AF_INET6 (IPv6)
+inet_ntop() -> Convierte un struct a su direccion IP en puntos correspondiente
+getaddrinfo() -> Obtiene toda la información necesaria para obtener un struct
+freeaddrinfo() -> Libera el espacio consumido por la lista dinámica addrinfo obtenida como respuesta
+socket() -> Llama a la rutina del sistema para abrir una conexión
+getprotobyname() -> Obtiene el protocolo deseado (TCP o UDP)
+bind() -> Linkea el socket obtenido a un puerto específico
+connect() -> Equivale a bind() resolviendo la conexión al puerto local con un puerto elegido automáticamente
+listen() -> Espera una determinada cantidad de conexiones y ejecuta un determinado comportamiento (se utiliza despues de bind())
+accept() -> Acepta una conexión encolada en la cola de conexiones entrantes por listen()
+send() -> Envía el socket entre dos conexiones aceptadas
+sendto() -> Envía el socket mediante el tipo Datagram (requiere encapsular la información con el método deseado)
+recv() -> Recibe un socket entre dos conexiones aceptadas
+recvto() -> Recibe el socket mediante el tipo Datagram (requiere encapsular la información con el método deseado)
+close() -> Cierra la conexión del socket. Libera finalmente el socket.
+shutdown() -> Cierra la conexión con un mayor control (1: desactiva el recibimiento de datos - 2: desactiva el enviado de datos - 3: desactiva todo)
+getpeername() -> Obtiene los datos del otro lado conectado
+gethostname() -> Obtiene el nombre de host de una determinada maquina
+fork() -> Crea una proceso hijo
+fcntl() -> Hace que el socket sea no bloqueante
+poll() -> Manda al sistema operativo a decirnos cuando está lista la información en un determinado socket y mientras tanto pone a dormir a nuestro proceso
+pollin() -> Alerta cuando es la información esta lista para ser recibida
+pollout() -> Alerta cuando la información puede enviarse sin ser bloqueada
+select() -> Permite monitorear muchos sockets al mismo tiempo. Dice cuales estan listos para leer, cuales para escribir y cuales arrojaron excepciones
+FD_SET() -> Agrega un elemento a la struct de fd
+FD_CLR() -> Elimina un elemento de la struct de fd
+FD_ISSET() -> Verifica que un elemento esté en la struct de fd
+FD_ZERO() -> Elimina todos los elementos de la struct fd
