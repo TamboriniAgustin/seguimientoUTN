@@ -1,5 +1,0 @@
-package Repositorios.RepositorioDeMonedas;
-
-public class UsuarioYaExisteException extends RuntimeException {
-
-}

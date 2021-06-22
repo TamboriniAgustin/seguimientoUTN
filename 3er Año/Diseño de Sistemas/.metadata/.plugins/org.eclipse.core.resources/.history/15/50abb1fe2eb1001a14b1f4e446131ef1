@@ -1,5 +1,0 @@
-package Repositorios;
-
-public class UsuarioYaExisteException extends RuntimeException {
-
-}

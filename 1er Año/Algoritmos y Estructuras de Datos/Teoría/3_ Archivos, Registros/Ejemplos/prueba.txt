@@ -1,7 +1,0 @@
-Alumno        			Legajo
-Bordon_Liz        		169125-9
-Celentano_Cristian        	168815-7
-Fausto_Jeronimo        		167985-5
-Tamborini_Agustin        	168012-2
-Tolava_Jorge        		163161-5
-Yampa_Facundo        		168742-6

@@ -1,4 +1,0 @@
-1_ Una vez que esta listo el archivo de bison (archivo.y) utilizo el comando: "bison -d archivo.y"
-2_ Una vez que esta listo el archivo de flex (archivo.l) utilizo el comando: "flex archivo.l"
-3_ Una vez realizado esto genero el ejecutable con el comando: "gcc -o archivo.exe archivoGeneradoPorBison.c archivoGeneradoPorFlex.c"
-4_ Abro el ejecutable
