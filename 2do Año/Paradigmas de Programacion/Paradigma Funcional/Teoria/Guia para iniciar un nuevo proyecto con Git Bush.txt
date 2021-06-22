@@ -1,0 +1,8 @@
+1) cd "Ubicacion donde guardar el proyecto"
+2) stack new "Nombre Proyecto"
+3) cd "Nombre Proyecto"
+4) stack setup
+5) stack build
+6) stack build intero
+7) code .
+8) stack ghci

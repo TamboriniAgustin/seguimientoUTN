@@ -1,0 +1,11 @@
+* En la tabla de eventos detallan 10 eventos, y en el nivel 1 generan 4 procesos. Cada uno de los procesos tiene que tener 1 solo estimulo, el proceso lo asocian a 2 estimulas diferentes.(con el mismo nombre) el concepto es correcto , la representación es incorrecta.
+
+* Para la nomenclatura del DD  DB TARJETA debería ser TARJETAS (A) , lo mismo para los otros almacenamientos, que salvo catalogo en ambos casos esta en singular, el resto esta en singular el DD y plural en el DFD.
+
+* En la especificación dice que recibe la factura por mail en la postcondicion , que no esta en el DFD el flujo DB Actualizar producto, tiene una estructura , que no es compatible con el Almacenamiento USUARIOS.
+ 
+* DD de Tarjeta ,lo indican como estimulo pero es un flujo de salida del sistema.
+
+* DD de confirmación de tarjeta, lo indican como dato de respuesta , pero es una entrada al sistema.
+
+* Faltan definiciones de flujos
