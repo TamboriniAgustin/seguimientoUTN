@@ -1,0 +1,7 @@
+*Las etiquetas asignan un nombre (hasta 31 caracteres) a una instruccion. Debe terminar en ":" .
+*Los comentarios permiten escribir notaciones para facilitar la comprension, el programa no ejecutara lo siguiente. Se declara como "; ...."
+*Las directivas son comandos que solo afectan a assembbler. No generan codigo objeto generalmente.
+
+LEER MAS EN EL PDF
+
+
