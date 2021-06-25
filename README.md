@@ -34,3 +34,6 @@
 * Física 1: PROMOCIONADO
 * Probabilidad y Estadística: PROMOCIONADO
 * Análisis Matemático 2: PROMOCIONADO
+
+### 2021
+* Final Gestión de Datos: APROBADO
