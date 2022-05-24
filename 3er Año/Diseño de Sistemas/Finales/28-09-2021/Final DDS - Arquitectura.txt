@@ -1,0 +1,14 @@
+1) Mantenibilidad: atributos que se relacionan a la facilidad de extender, modificar o corregir errores de un software.
+   Usabilidad: atributos que se relacionan con el esfuerzo que implica su uso.
+   La confirmación a través de un link es de fácil uso para los usuarios, por lo que no deberían tener problemas. En términos de mantenibilidad podría traer
+   problemas si es que se cae el generador de links (no podrían confirmarse las recepciones).
+   También es de facil uso la respuesta al mensaje y repite el mismo problema en cuanto a la mantenibilidad.
+   La tercera opción es más complicada respecto a la usabilidad para los usuarios, pero se gana mantenibilidad al no depender de otro sistema externo. 
+
+2.1) Se está priorizando la eficiencia (conjunto de atributos relacionados con el desempeño del software y la cantidad de recursos necesarios).
+     También se prioriza la tolerancia a fallos (habilidad para responder ante fallas), que se podría ubicar dentro de mantenibilidad.
+
+2.2) Propondría utilizar un broker como intermedio ante estos casos que se encargue de reedirigir la request al servicio REST.
+     En el caso de que el servicio REST ofrezca una respuesta sastifactoria se le devuelve al cliente, en caso de un error el broker
+     se encargaría de manejarlo. Por ejemplo, ante las caídas puede bloquear las operaciones en dólares.
+
