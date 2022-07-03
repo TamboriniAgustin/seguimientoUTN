@@ -1,0 +1,8 @@
+2018 - Tarde
+1) Falso. En memoria se mantienen en forma de direcciones lógicas.
+
+2) Falso. El aprovechamiento de la memoria es mejor con Worst fit.
+
+4) Falso. Podríamos crear archivos vacíos siempre y cuando haya inodos disponibles y espacio en la entrada del directorio.
+
+5) Falso. Resulta mejor utilizar asignación contigua para aprovechar el principio de localidad espacial.

@@ -1,0 +1,9 @@
+1) En el hard link se borra el directorio y decrementa el contador de hard links (en caso de llegar a 0 se borra el archivo liberando el inodo). En el soft link se elimina el directorio y se libera el inodo. En ambos hay que actualizar la tabla de bloques libres.
+
+2) a_ Segmentación. Sencillo cálculo de direcciones y no tiene fragmentación interna.
+   b_ Buddy system. La asignación es contigua y eso facilita la traducción. La fragmentación interna podría llegar a ser muy baja.
+
+3) Es hardware que se utiliza para guardar la información de las últimas páginas accedidas. Se lee cuando el SO solicita una página y se escribe cuando se modifica la tabla de páginas. Mejora el rendimiento ya que se producirán menos page faults.
+
+4) Si en ambos casos. El primero se puede dar si UFS utiliza solo punteros directos y el segundo si utiliza algún indirecto.
+

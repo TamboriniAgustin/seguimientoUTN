@@ -1,0 +1,10 @@
+2018 - Mañana
+1) Politicas de limpieza o de carga (bajo demanda o prepaginación), de gestión del conjunto residente, de asignación (cantidad fija o variable), de reemplazo (algoritmos y global o local). Lo único que no podría combinarse es la asignación fija con reemplazo global.
+
+2) No. Es la misma MMU la que se encarga de validar.
+
+3) También hay que marcar el bitmap de los bloques involucrados como libres.
+
+5) V o F
+  a_ F. Puede generar externa e interna ya que combina el funcionamiento de los particionamientos estático y dinámico.
+  b_ F. Tiene tantas entradas como bloques libres que haya en la partición hasta alcanzar el tamaño teórico máximo.

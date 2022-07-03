@@ -1,0 +1,14 @@
+Redes conmutadas: distintos nodos que conmutan la comunicación entre origen y destino. El conjunto de nodos es llamado una red de comunicaciones.
+No todos los nodos están conectados entre sí. Los nodos terminales se conectan a otros puntos de enlace.
+
+Conmutación de circuitos
+Canal dedicado entre dos estaciones. Hoy en día se utiliza la conmutación automática digital, que cuenta con un conmutador digital (proporciona la ruta), una interfaz de red (incluye funciones y hardware para conectar dispositivos digitales) y la unidad de control (establece, mantiene y libera las conexiones).
+Contamos con los abonados, las líneas de cada abonado, las centrales y las líneas troncales que unen centrales.
+
+Conmutación de paquetes
+Se conmutan paquetes de diferentes estaciones, por lo que obtenemos una mayor eficiencia en la línea.
+Para fragmentar los mensajes en paquetes y enviarlos se utilizan dos técnicas:
+* Datagramas: cada paquete es independiente respecto al anterior. Es útil cuando se transmiten pocos paquetes, más flexible que circuitos virtuales.
+* Circuitos virtuales: se establece un circuito virtual para que todos los paquetes sigan por el mismo camino. Más veloz que los datagramas, pero menos confiable.
+Se requiere una interfaz entre los dispositivos conectados y la red.
+-------------------------------------

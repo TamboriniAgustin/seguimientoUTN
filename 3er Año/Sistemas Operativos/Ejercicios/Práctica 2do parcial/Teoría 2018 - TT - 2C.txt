@@ -1,0 +1,12 @@
+1) El cálculo de la dirección física será (nro marco * tamaño pagina) + offset. El número de marco se obtiene desde la dirección lógica (nro pagina * tamaño pagina + offset) a través de la tabla de páginas.
+Las páginas más grandes tendrán mayor fragmentación interna. La tabla de páginas será menor en páginas más grandes. No hay fragmentación externa en la paginación.
+
+2) * Establecer una contraseña para el archivo.
+   * Matriz de permisos de cada usuario por archivo (más ocupa).
+   * Tabla de permisos por cada archivo.
+   * Permiso para owner, para un grupo de usuarios y para el resto de usuarios. Esta es la opción que menos espacio ocupa (tan solo 9 bits).
+
+3) Esto es incorrecto, aumentar el grado de multiprogramación solo incrementaría el número de Page Faults producidos ya que no se está aplicando correctamente la memoria virtual. Una solución rápida sería disminuir el grado de multiprogramación para tomar menor cantidad de procesos en CPU y disminuir el grado de multiprogramación.
+
+4) a_ Verdadero. En caso de que el marco esté ocupado y la página a reemplazar haya sido modificada se requerirían dos accesos.
+   b_ Falso. El archivo A es el original, siempre sería accesible salvo que se elimine o se deniegue por permisos. El archivo C si sería inaccesible.

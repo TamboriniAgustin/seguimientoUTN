@@ -1,0 +1,45 @@
+Redes LAN:
+* Capas:
+  - Física
+	Codificación y decodificación de señales
+	Preámbulo de sincronización
+	Transmisión y recepción de los bits
+	Especificaciones del medio y la topología
+  - MAC (Control de acceso al medio)
+	Ensamblado y desamblado de datos en tramas
+	Reconocimiento de direcciones
+	Detección de errores
+  - LLC (Control de enlace lógico)
+	Interfaz con capas superiores
+	Control de errores y de flujo
+
+Protocolos MAC
+* Round Robin: cada estación tiene la oportunidad de transmitir.
+* Reserva: se divide el tiempo en ranuras para cada estación como en TDM. Útil en tráfico continuo.
+* Contención: se compite por los turnos para transmitir. Útil en baja carga pero tiende a colapsar con altas cargas. 
+¿Cómo funciona? Si el medio está libre, transmite; sino sigue escuchando hasta que se libere para poder transmitir. Si se detecta una colisión se emite una señal de alerta para que las demás dejen de transmitir por un determinado tiempo. Luego se intenta transmitir nuevamente. Se utiliza la espera exponencial binaria para mantener estabilidad.
+
+Trama MAC
+1) Preámbulo: sincronización entre emisor y receptor
+2) SFD: delimitador de comienzo de trama
+3) DA: estación de destino
+4) SA: estación de origen
+5) Longitud/Tipo: longitud de los datos
+6) Datos: proporcionados por el LLC
+7) Relleno: espacio extra para completar el espacio restante de los datos
+8) FCS: secuencia de control de trama
+9) Extensión
+* La trama va de 3 a 8, junto con el resto forma el paquete.
+
+Redes LAN Inalámbricas
+Clasificación:
+  - LAN de espectro expandido
+	Celdas múltiples
+	Diferentes frecuencias dentro de la misma banda
+	Basadas en concetrador - P2P
+  - LAN OFDM
+  - LAN de infrarrojos
+
+WiFi:
+* Celdas aisladas o conectadas a un sistema troncal de distribución (switch o red cableada o inalámbrica) a través de un puente
+* La integración de LAN cableada se realiza a través de un portal
