@@ -37,3 +37,35 @@
 
 ### 2021
 * Final Gestión de Datos: APROBADO
+* Ingeniería de Software: APROBADO
+* Economía: APROBADO
+* Sistemas Operativos: RECURSADO
+* Inglés Técnico 2: PROMOCIONADO
+* Final Ingeniería de Software: APROBADO
+* Final Diseño de Sistemas: APROBADO
+
+### 2022
+* Sistemas Operativos: PROMOCIONADO
+* Matemática Superior: APROBADO
+* Comunicaciones y Redes: PROMOCIONADO
+* Experiencia de Usuario y Accesibilidad: PROMOCIONADO
+* Fisica 2: RECURSADO
+* Final Economía: APROBADO
+
+### 2023
+* Final Matemática Superior: APROBADO
+* Fisica 2: RECURSADO
+* Ciberseguridad: APROBADO
+* Fisica 2: APROBADO
+* Administración de Recursos: APROBADO
+
+### 2024
+* Final Administración de Recursos: APROBADO
+* Final Ciberseguridad: APROBADO
+* Investigación Operativa: PROMOCIONADO
+* Comunicaciones: APROBADO
+* Final Fisica 2: APROBADO
+* Habilitación Profesional: PROMOCIONADO
+* Teoría del control: APROBADO
+* Simulación: APROBADO
+* Final Teoría del Control: APROBADO
