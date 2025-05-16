@@ -1,0 +1,63 @@
+
+
+************************  ROUTER 2   *****************
+
+conf t
+!
+crypto isakmp policy 10
+ encr aes
+ authentication pre-share
+ group 5
+ lifetime 900
+!
+crypto isakmp key cisco address 10.1.0.1
+!
+crypto ipsec transform-set 50 ah-sha-hmac esp-3des
+!
+crypto map mymap 10 ipsec-isakmp 
+ set peer 10.1.0.1
+ set security-association lifetime seconds 1800
+ set transform-set 50 
+ match address 101
+!
+ip ssh version 1
+!
+spanning-tree mode pvst
+!
+interface FastEthernet0/0
+ ip address 10.4.0.1 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface FastEthernet0/1
+ ip address 10.3.0.1 255.255.255.0
+ duplex auto
+ speed auto
+ no shutdown
+!
+interface Serial0/0/0
+ ip address 10.2.0.2 255.255.255.0
+ crypto map mymap
+ no shutdown
+!
+interface Serial0/0/1
+ no ip address
+ shutdown
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+router eigrp 1
+ network 10.0.0.0
+ auto-summary
+!
+!
+access-list 101 permit ip 10.4.0.0 0.0.255.255 10.10.0.0 0.0.255.255
+!
+line vty 0 4
+ login
+!
+end
+copy run start

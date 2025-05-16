@@ -1,0 +1,25 @@
+switch-100(config)#interface ?
+  Ethernet         IEEE 802.3
+  FastEthernet     FastEthernet IEEE 802.3
+  GigabitEthernet  GigabitEthernet IEEE 802.3z
+  Port-channel     Ethernet Channel of interfaces
+  Vlan             Catalyst Vlans
+  range            interface range command
+switch-100(config)#interface range f0/1-10
+switch-100(config-if-range)#?
+  cdp               Global CDP configuration subcommands
+  channel-group     Etherchannel/port bundling configuration
+  channel-protocol  Select the channel protocol (LACP, PAgP)
+  description       Interface specific description
+  duplex            Configure duplex operation.
+  exit              Exit from interface configuration mode
+  ip                Interface Internet Protocol config commands
+  lldp              LLDP interface subcommands
+  mls               mls interface commands
+  no                Negate a command or set its defaults
+  shutdown          Shutdown the selected interface
+  spanning-tree     Spanning Tree Subsystem
+  speed             Configure speed operation.
+  storm-control     storm configuration
+  switchport        Set switching mode characteristics
+  tx-ring-limit     Configure PA level transmit ring limit

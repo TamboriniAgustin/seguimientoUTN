@@ -1,0 +1,9 @@
+Mecánica:
+1. Calcular las probabilidades
+2. Calcular la información (En Shannon)
+3. Calcular la entropía
+4. Calcular el tao
+5. Calcular la relación
+6. Calcular la tasa de información
+
+Tasa de información y capacidad del canal es lo mismo

@@ -1,0 +1,23 @@
+switch-100#show running-config 
+Building configuration...
+
+Current configuration : 1086 bytes
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname switch-100
+!
+enable secret 5 $1$mERr$og3fU2Zrm1u/R/oQwVr8H/
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface FastEthernet0/1

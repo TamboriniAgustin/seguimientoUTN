@@ -1,0 +1,2 @@
+Hay 2 dominios de Broadcast (cada switch genera 1)
+Hay 4 dominio de Colision (por las 4 pcs)

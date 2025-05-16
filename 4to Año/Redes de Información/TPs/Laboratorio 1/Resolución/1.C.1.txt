@@ -1,0 +1,78 @@
+C2950 Boot Loader (C2950-HBOOT-M) Version 12.1(11r)EA1, RELEASE SOFTWARE (fc1)
+Compiled Mon 22-Jul-02 18:57 by miwang
+Cisco WS-C2950-24 (RC32300) processor (revision C0) with 21039K bytes of memory.
+2950-24 starting...
+Base ethernet MAC Address: 0060.2F54.2449
+Xmodem file system is available.
+Initializing Flash...
+flashfs[0]: 2 files, 0 directories
+flashfs[0]: 0 orphaned files, 0 orphaned directories
+flashfs[0]: Total bytes: 32514048
+flashfs[0]: Bytes used: 3059010
+flashfs[0]: Bytes available: 29455038
+flashfs[0]: flashfs fsck took 1 seconds.
+...done Initializing Flash.
+
+Boot Sector Filesystem (bs:) installed, fsid: 3
+Parameter Block Filesystem (pb:) installed, fsid: 4
+
+
+Loading "flash:/c2950-i6q4l2-mz.121-22.EA4.bin"...
+######################### [OK]
+              Restricted Rights Legend
+
+Use, duplication, or disclosure by the Government is
+subject to restrictions as set forth in subparagraph
+(c) of the Commercial Computer Software - Restricted
+Rights clause at FAR sec. 52.227-19 and subparagraph
+(c) (1) (ii) of the Rights in Technical Data and Computer
+Software clause at DFARS sec. 252.227-7013.
+
+           cisco Systems, Inc.
+           170 West Tasman Drive
+           San Jose, California 95134-1706
+
+
+
+Cisco Internetwork Operating System Software
+IOS (tm) C2950 Software (C2950-I6Q4L2-M), Version 12.1(22)EA4, RELEASE SOFTWARE(fc1)
+Copyright (c) 1986-2005 by cisco Systems, Inc.
+Compiled Wed 18-May-05 22:31 by jharirba
+
+Cisco WS-C2950-24 (RC32300) processor (revision C0) with 21039K bytes of memory.
+Processor board ID FHK0610Z0WC
+Running Standard Image
+24 FastEthernet/IEEE 802.3 interface(s)
+
+32768K bytes of flash-simulated non-volatile configuration memory.
+Base ethernet MAC Address: 0060.2F54.2449
+Motherboard assembly number: 73-5781-09 
+Power supply part number: 34-0965-01
+Motherboard serial number: FOC061004SZ
+Power supply serial number: DAB0609127D
+Model revision number: C0
+Motherboard revision number: A0
+Model number: WS-C2950-24
+System serial number: FHK0610Z0WC
+
+Cisco Internetwork Operating System Software
+IOS (tm) C2950 Software (C2950-I6Q4L2-M), Version 12.1(22)EA4, RELEASE SOFTWARE(fc1)
+Copyright (c) 1986-2005 by cisco Systems, Inc.
+Compiled Wed 18-May-05 22:31 by jharirba
+
+Press RETURN to get started!
+
+
+%LINK-5-CHANGED: Interface FastEthernet0/2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/2, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan1, changed state to up
+
+%LINK-5-CHANGED: Interface FastEthernet0/3, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/3, changed state to up
+
+%LINK-5-CHANGED: Interface FastEthernet0/1, changed state to up
+
+%LINEPROTO-5-UPDOWN: Line protocol on Interface FastEthernet0/1, changed state to up

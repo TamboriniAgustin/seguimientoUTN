@@ -1,0 +1,44 @@
+
+************************  ROUTER ISP   *****************
+
+conf t
+
+hostname ISP
+
+ip ssh version 1
+
+spanning-tree mode pvst
+
+interface FastEthernet0/0
+ no ip address
+ shutdown
+
+
+interface FastEthernet0/1
+ no ip address
+ shutdown
+
+interface Serial0/0/0
+ ip address 10.2.0.1 255.255.255.0
+ clock rate 128000
+ no shutdown
+
+interface Serial0/0/1
+ ip address 10.1.0.2 255.255.255.0
+ clock rate 128000
+ no shutdown
+
+interface Vlan1
+ no ip address
+ shutdown
+
+router eigrp 1
+ network 10.0.0.0
+ auto-summary
+
+
+line vty 0 4
+ login
+
+end
+copy run start

@@ -1,0 +1,40 @@
+switch-100(config)#interface f0/2
+switch-100(config-if)#swi
+switch-100(config-if)#switchport mode access
+switch-100(config-if)#swi
+switch-100(config-if)#switchport port
+switch-100(config-if)#switchport port-security 
+switch-100(config-if)#swit
+switch-100(config-if)#switchport por
+switch-100(config-if)#switchport port-security ma
+switch-100(config-if)#switchport port-security max
+switch-100(config-if)#switchport port-security maximum 1
+switch-100(config-if)#swi
+switch-100(config-if)#switchport por
+switch-100(config-if)#switchport port-security mac
+switch-100(config-if)#switchport port-security mac-address 00D0.FF8B.2C7E
+switch-100(config-if)#swi
+switch-100(config-if)#switchport por
+switch-100(config-if)#switchport port-security vio
+switch-100(config-if)#switchport port-security violation shu
+switch-100(config-if)#switchport port-security violation shutdown 
+switch-100(config-if)#exit
+switch-100(config)#interface f0/3
+switch-100(config-if)#swi
+switch-100(config-if)#switchport mode access
+switch-100(config-if)#swi
+switch-100(config-if)#switchport por
+switch-100(config-if)#switchport port-security 
+switch-100(config-if)#swi
+switch-100(config-if)#switchport por
+switch-100(config-if)#switchport port-security max
+switch-100(config-if)#switchport port-security maximum 1
+switch-100(config-if)#swi
+switch-100(config-if)#switchport por
+switch-100(config-if)#switchport port-security mac
+switch-100(config-if)#switchport port-security mac-address 0001.6314.781C
+switch-100(config-if)#swi
+switch-100(config-if)#switchport por
+switch-100(config-if)#switchport port-security vio
+switch-100(config-if)#switchport port-security violation shut
+switch-100(config-if)#switchport port-security violation shutdown 

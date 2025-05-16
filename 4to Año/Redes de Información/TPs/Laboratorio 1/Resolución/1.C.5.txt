@@ -1,0 +1,23 @@
+Switch#show ?
+  access-lists       List access lists
+  arp                Arp table
+  boot               show boot attributes
+  cdp                CDP information
+  clock              Display the system clock
+  crypto             Encryption module
+  dtp                DTP information
+  etherchannel       EtherChannel information
+  flash:             display information about flash: file system
+  history            Display the session command history
+  hosts              IP domain-name, lookup style, nameservers, and host table
+  interfaces         Interface status and configuration
+  ip                 IP information
+  lldp               LLDP information
+  logging            Show the contents of logging buffers
+  mac                MAC configuration
+  mac-address-table  MAC forwarding table
+  mls                Show MultiLayer Switching information
+  monitor            SPAN information and configuration
+  ntp                Network time protocol
+  port-security      Show secure port information
+  privilege          Show current privilege level

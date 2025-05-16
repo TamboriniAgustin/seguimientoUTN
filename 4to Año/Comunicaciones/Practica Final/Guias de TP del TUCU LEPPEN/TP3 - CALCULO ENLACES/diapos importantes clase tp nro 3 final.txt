@@ -1,0 +1,9 @@
+3
+4
+5
+14 - ej 4 guia tipo parcial
+4.b. La ganancia del amplificador debe ser mayor a 5,5db. El de 3 no sirve. El de 9db no hay que usarlo porque puede distorsionar la señal. El de 6 es el que calza justo
+
+16 - ejercicio 5 de la guía; tipo parcial
+24 - ej 8 guia tipo parcial
+28 - ej 9 guia tipo parcial

@@ -1,0 +1,128 @@
+NUCLEO#sh run
+Building configuration...
+
+Current configuration : 814 bytes
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname NUCLEO
+!
+enable secret 5 $1$mERr$5.a6P4JqbNiMX01usIfka/
+enable password cisco
+!
+!
+!
+ip ssh version 1
+ip domain-name tl1.com
+!
+username redes privilege 15 password 0 cisco
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet1/1
+!
+interface GigabitEthernet2/1
+!
+interface GigabitEthernet3/1
+!
+interface GigabitEthernet4/1
+!
+interface GigabitEthernet5/1
+!
+interface Vlan1
+ ip address 192.168.1.251 255.255.255.0
+!
+!
+!
+!
+line con 0
+!
+line vty 0
+ login local
+ transport input ssh
+line vty 1 4
+ exec-timeout 1 0
+ password clase
+ login
+ transport input ssh
+line vty 5 15
+ no login
+ transport input ssh
+!
+!
+!
+!
+end
+
+
+NUCLEO#sh run
+Building configuration...
+
+Current configuration : 814 bytes
+!
+version 12.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname NUCLEO
+!
+enable secret 5 $1$mERr$5.a6P4JqbNiMX01usIfka/
+enable password cisco
+!
+!
+!
+ip ssh version 1
+ip domain-name tl1.com
+!
+username redes privilege 15 password 0 cisco
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet1/1
+!
+interface GigabitEthernet2/1
+!
+interface GigabitEthernet3/1
+!
+interface GigabitEthernet4/1
+!
+interface GigabitEthernet5/1
+!
+interface Vlan1
+ ip address 192.168.1.251 255.255.255.0
+!
+!
+!
+!
+line con 0
+!
+line vty 0
+ login local
+ transport input ssh
+line vty 1 4
+ exec-timeout 1 0
+ password clase
+ login
+ transport input ssh
+line vty 5 15
+ no login
+ transport input ssh
+!
+!
+!
+!
+end

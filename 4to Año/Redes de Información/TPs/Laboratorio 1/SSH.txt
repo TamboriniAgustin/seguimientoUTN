@@ -1,0 +1,16 @@
+conf t
+
+ip domain-name tl1.com
+crypto key generate rsa
+
+ip ssh version 2
+line vty 0
+transport input ssh
+login local
+username redes privilege 15
+
+enable secret cisco123
+
+exit
+
+show ssh

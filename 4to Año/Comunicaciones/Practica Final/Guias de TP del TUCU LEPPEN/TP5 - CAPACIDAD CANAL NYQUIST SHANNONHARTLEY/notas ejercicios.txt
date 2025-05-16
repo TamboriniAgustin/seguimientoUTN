@@ -1,0 +1,4 @@
+Hay que tener cuidado si usás canal real o ideal (nyquist o hartley)
+
+ej 5: Los tipos de sistema son multinivel o binario. El que se recomienda acá es el binario.
+ej 6: si te tiran los datos en voltios y no watios, hay que cambiar el valor de una fórmula de 10 a 20 por una relación de pérdida de potencia y etc.

@@ -1,0 +1,23 @@
+Switch>show ?
+  arp                Arp table
+  cdp                CDP information
+  clock              Display the system clock
+  crypto             Encryption module
+  dtp                DTP information
+  etherchannel       EtherChannel information
+  flash:             display information about flash: file system
+  history            Display the session command history
+  interfaces         Interface status and configuration
+  ip                 IP information
+  lldp               LLDP information
+  mac                MAC configuration
+  mac-address-table  MAC forwarding table
+  mls                Show MultiLayer Switching information
+  privilege          Show current privilege level
+  sessions           Information about Telnet connections
+  ssh                Status of SSH server connections
+  tcp                Status of TCP connections
+  terminal           Display terminal configuration parameters
+  users              Display information about terminal lines
+  version            System hardware and software status
+  vlan               VTP VLAN status

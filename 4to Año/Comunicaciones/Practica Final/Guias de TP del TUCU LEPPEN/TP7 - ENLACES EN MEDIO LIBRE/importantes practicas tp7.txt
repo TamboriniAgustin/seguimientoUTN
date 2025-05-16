@@ -1,0 +1,8 @@
+ejercicio 1 (+ ejercicio 2). lo que se suma es el LP que es una pérdida que metés en la fórmula general del enlace
+
+si te dan un rango de frecuencias tenés que interpolar (sacar el valor medio de los extremos) (como ej 5)
+
+si te dan alcance visual tenés que tener en cuenta si vas a tomar la curvatura terrestre o no. si no, 3,6; si si, 4,2 para las fórmulas. luego hay que resolver por las dos formas propuestas de la ppt SI O SI
+
+para el 10, para la cantidad de empalmes es uno menos de la cantidad de carretes que tenés que usar. entonces si cubris 10000 metros con carretes de 400 metros te da que necesitas 25 carretes. luego esto seran 24 empalmes
+
