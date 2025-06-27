@@ -69,3 +69,6 @@
 * Teoría del control: APROBADO
 * Simulación: APROBADO
 * Final Teoría del Control: APROBADO
+
+## 2025
+* Final Comunicaciones: APROBADO
