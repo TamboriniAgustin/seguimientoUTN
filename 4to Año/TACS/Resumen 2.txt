@@ -1,0 +1,2397 @@
+*********************************************
+CLASE 1
+*********************************************
+¿Qué pasa cuando se hace enter a una url?
+Traducción del dominio a una dirección ip por dns
+envío de un request http, protocolo tcp/ip
+
+se envía un request al server para pedir el recurso 
+especificado en la url
+
+¿Cómo conseguir el recurso?
+contenido estático devuelto por el server a través de un socket
+
+web server del lado de servidor
+browser del lado del cliente
+
+html es declarativo -> explica qué hay que hacer, no como
+años 90 -> aparece la PC
+
+algoritmo del lado del server -> archivo pedido  navegar directorio, accedo, leo el recurso y devuelvo por socket. Fin del pedido
+--> Si no se encuentra error 404
+
+qué tal si...
+Permito que me pidan arhivos ejecutables y la respuesta la envío por el socket...
+-> Esto es contenido dinámico
+
+Primer tecnología que permitio servir contenido dinámico
+CGI -> common gateway interface - lenguaje
+recibe pedido,
+parseo
+encuentro recurso
+ejecuto con parámetros pasados
+envio la respuesta
+
+
+Ejecución -> cargar en memoria, ejecutar, liberar recursos
+
+---------
+Modificación para servir contenido dinámico
+---------
+Mejorar -> precargar
+levanto y cargo una vez, ejecuto muchas veces y libero
+php asp java .net
+el server levanta lo que tiene que ejecutar y cuandotermina libere todo
+
+------------
+¿Qué significa ser usuario?
+Persona que interactua con el sistema
+Perosna que se conecta al servidor
+
+Http es conexión por request
+recibe y luego se desconecta
+---------------
+Estado conversacional - sesión
+sin el, cada request es uno independiente y la historia de interacción se olvida
+ Debe mantenerse para la tienda online
+ 
+No en la url -> desprolijo, inseguro muy largo
+
+Etiqueta hidden -> oculta contenido. Inseguro, pero más dificil darse cuenta
+Seguridad por ofuscación
+
+cookie -> archivo en la computadora del cliente
+hay un mapa
+ key domain - value user
+ en cada request va la cookie
+ Todavía es inseguro, aún se puede modificar.
+ Es más prolijo
+ No es cómodo porque viajan un monton de datos
+ 
+sesión -> Del lado del servidor se guarda la sesión
+El servidor tiene un mapa
+Se usa una cookie con un token muy dificil de adivinar
+y esa cookie se envia en cada request
+y así el servidor accede a la sesión del usuario
+Token del lado del servidor accede al mapa
+Desventajas -> Se pueden robar el token, interceptarlo en medio de la cominicación
+
+sesión + https -> encripción asimétrica
+garatiza integridad y origen
+ 
+ *********
+ Fricción: resistencia de una página a ser utilizada
+ *********
+ Validar desde el server y del cliente
+ javascript nació para reducir la fricción del cliente
+ ------
+ javascript hace request http y modifica en realtime el html todo sin cambiar de página
+ -> Esto es async - AJAX = asychronus javascript and xml
+ 
+AJAX -> para mandar request asíncronos
+Es una buena solución
+El cliente y el server deben ponerse de acuerdo con el timeout
+La mejor solución cuando se transmite poca información
+Con mucha información web sockets
+
+ *********************************************
+ CLASE 2
+ *********************************************
+ ¿Cómo generar APIs e interfaces que usen otros?
+ 
+RPC/RMI
+Necesito conocer la firma de la función
+Alto acoplamiento
+llamadas sincrónoicas
+tratamos los errores como exccepciones
+La abstracción de que pasa todo localmente, pero eso no es verdad. Hace mucho ruido
+Pueden existir múltiples implementaciones ene cada lenguaje
+
+
+SERIALIZACÓN DE DATOS
+Los tipos de datos entre lengiajes no son iguale, dependen de su implementación
+
+Javasccript tiene el tipo de dato Null y number
+java tiene muchos tipos numéricos, pero no el tipo de dato null
+
+La arquitectura importa en el tipo de datos
+
+reduced instructions set - complex instruction set
+--> Por esto sockets es durísimo
+--------------
+Se necesita una solución para serializar datos:
+
+XML ->  human readdable, soporta comentarios, tiene un esquema de autovalidación
+La forma de expresar arrays es complicada
+Feo comparado con json
+
+JSON -> Más human redable, la usan muchas apis, poseen un esquema de validación (Json schema), se distinguen números y strings, hay arrays, tiene estructura jerárquica
+javasccript object notation
+
+YAML -> más human redable, los tabs importan
+se pueden tener json dentro de yaml, es retrocompatible, se pueden crear tipos de datos,
+Yaml no tiene un esquema de validación propio
+
+
+Cada lenguaje tiene su propia implementación
+¿Como comunico lenguajes diferentes? 
+
+Se puede hacer mejor que json, xml, yaml!!!
+Son texto plano, se podría hacer en binario
+Serialización binaria
+----
+Binary encoding permite comunicar entre distintos lenguajes con performance
+----
+Protocol buffer
+cap n'protocol
+....
+
+
+Vemos Protocol Buffers
+------------------------
+Neutral al lenguaje
+Neutral a la plataforma -> no importa si corro sobre x86, etc siempre va a funcionar
+
+rápida serialización/desserialización -> Es muy importante. El cuello de botella de muchas apps es la serialiización
+serializado binario - non human redable -> tiene json mapping para convertir a json, pero no es preciso
+para debugguear es útil
+mensajes autodescriptivos -> Bueno para discovery, ver qué tipo de mensaje está llegando
+
+Evolucionable -> si tengo un método que recibe ciertoss mensajes, puedo agregar parámetros que lleguen por el caño
+-> Hay un número a la derecha de cada campo, permite deprecar campos
+Así no cambio la estructura y permito evitar desencodear campos deprecados. Así no rompe nada
+es retrocompatible
+con RMI / RPC no lo había -> jodido
+
+
+¿Qué se necesita para leer protocol buffer?
+una biblioteca que deseralice o
+un compilador -> muy poderoso
+
+-----------------------------------
+Transporte y mensajería
+-----------------------------------
+RPC y RMI eran piolas, pero limitados
+
+SOAP ->  simple object access protocol
+define cómo dos objetos en diferentes procesos pueden comunicarse por medio de intercambio de datos XML
+
+Es un protocolo
+Extensible -> seguridad
+Es como rest, pero todo post
+Neutral -> pude funcionar con vario protocolos, http, smtp
+independiente -> funciona sobre cialquier paradigma
+Funciona exclusivamente sobre xml
+tiene un header, body -> igualito a html
+--------------------------------
+ SOAP tine un lenguaje que dice cómo funciona una API, tipo de cada campo, orden, estructura, orientado a documento y procedimientos -> WSDL Web Services description language
+ 
+ El archivo dice cómo son los request y los responses
+ --------------------------------
+ Principal competidor de SOAP -> REST
+ Representational state transfer
+Estilo de arquitectura, ni siquiera una arquitectura
+Una api es más o menos restful
+
+Propone
+--------
+Arquitectura cliente servidor
+stateless -> El servidor no debe mantener un estado sobre la comunicación con el clieente, los datos del cliente deben viajar en cada request.
+Si adiero a rest, no podría mantener sesiones de usuario en el servidor para saber si está logueado
+
+¿Por qué rest pide que no se guarde estado?
+** Por performance **
+Por escalabilidad
+Qué pasa si tengo varios serviores? Si tuviera estado, debería replicarse en varios servidores
+Si siempre cayera el cliente al mismo servidor, tampoco sirve para resolver el problema porque se podría caer. Necesariamente debo replicarse
+-> podría usar una BD, pero tengo un unico punto de falla
+---------
+Sin estado puedo escalar indefinidamente
+---------
+
+
+cache aware -> los recursos deben ser altamente cacheables
+
+Debe tener interfaz uniforme -> Richardson maturity model
+-----------
+Definió los niveles hacia la gloria de rest
+-----------
+Nivel 0 swamp of POX *** 
+****************************
+Pantano del viejo xml. Es hacer todo mal
+
+Nivel 1 Resources *** 
+****************************
+Tengo recursos y los defino con sustantivos. Se parece a un file system
+Rest funciona sobre HTTP y tenemos URls
+--------------
+No hacer urls con servicios, sino con recursos
+/usersServices está mal
+El recurso es /users
+--------------
+La convención es usar plural en los recursos
+
+Nivel 2 HTTP verbs/ status code ***
+****************************
+Utilizar verbos http
+GET traer recursos
+POST crear un recurso. Tiene un Body
+PUT para modificar todo el recurso
+PATCH para modificar parcialmente un recurso
+DELETE eliminar un recurso
+OPTIONS operaciones sobre un recurso. Me dice que verbos puedo correr sobre un recurso
+Ej.
+OPTIONS /users dice -> puede crear, modificar, etc..
+
+------------
+Los verbos http se pueden clasificar como
+seguro -> sin efeccto de lado, que son read only, como GET
+idempotente -> el server queda en el mismo estado si se hace un mimo request N cantidad de veces
+
+Todo método seguro es idempotente necesariamente
+método | seguro  | idempotente
+-------------------------------
++
+GET    | si      | si
++
+PUT    | no      | si  -> puedo llamar a put n veces y no genera usuarios nuevos
++
+PATCH no es idempotente porque se usa para agregar campos nuevos
++
+DELETE es idempotente porque de lo mismo llamarlo una o muchas veces
++
+POST no es seguro ni idempotente, genera recursos
+
+Por default asumimos que la API REST va a funcionar así, queremos que sea una obviedad, para que sea más fácil usarlo y tener más cliente
+
+-----
+Códigos de respuesta (necesarios para el nivel 2)
+2xx -> todo ok
+3xx -> suelen ser redirects
+4xx -> Hubo un error, pero del lado del cliente
+419 -> i'm a tea pot
+
+5xx -> error del lado del servidor
+------
+
+
+------------
+
+Nivel 3 HATEOAS ***
+****************************
+Hypermedia as the egine of application state
+Cuando se entra a una página
+Html es navegable
+Se envía el contenido de la respuesta más links de cosas útiles.
+Lo que sea útil para la apis
+
+Problema de hateoas -> no está en http, no está en el estándar
+Por eso existen muchos estándares para implementarlo
+Como hay muchos estándares, nadie lo usa y nadie se pone de acuerdo.
+
+Por eso HATEOAS es opcional
+Tiene ventajas
+Es más usable, la gente va a tener más ganas de usar la API
+
+-------------------------------------------
+CACHING -> Es super importante para REST
+
+No es viable un negocio sin caches, se necesitarían muchos servers. Hay páginas que sin caching no funcionan
+----------------------------
+Headers de cache
+----------------------------
+Cache Control es un header que está en el response del servidor
+
+Tiene opciones como
+no store -> no cachear nada
+
+no cache -> chequear con el servidor si el recurso cambió o no. Fuerza una revalidación del recurso
+
+private / public -> El response puede ser cacheado por servidores privados o públicos.
+Hay servers de 3ros de por medio como cdns y puedo indicarles si cachear o no
+Puedo enviar información privada
+
+max age -> tiempo de validez de la response
+
+if modified since -> indica si el recurso se modificó desde cierta fecha. Devielve 304 cuando no se modifico
+
+e-tag -> código generado a partir del response. Se puede pensar como un hash. Por default algunos servers lo generan. Hay uno strong y otro weak
+Puede usarse para locking
+
+Ejemplo:
+GET /users/1
+Etag 34..
+
+PUT /users/1
+If-match 34.. -> si coincide, permite modificar el usuario, sino significa que el recurso cambió y no permite que lo modifiquemos
+
+
+if-none-match -> Pudo el recurso, si el e-tag es diferente a este campo
+
+Baring -> header que envía el server que dice qué campos hay que chequear, indica qué campos pueden cambiar del body
+
+La cache puede ser el browser o un server en el medio (CDN)
+Los request seguros se cachean
+El código de respuesta también es cacheable
+El 99% de las veces se cachea un GET
+Se cachea la url y el verbo
+-------------------------------------
+PROBLEMAS DE REST
+-------------------------------------
+¿Qué pasa si quiero hacer busquedas por varios criterios?
+Deben tener un orden? Todos deben ser obligatorios?
+Cómo filtro?
+
+Se resuelve con query params
+
+¿Qué pasa si no quiero todos los campos del recusos?
+por ejemplo tengo una versión de app web y otra mobile.
+Puedo usar query params, y pedir por algunos campor
+
+----> peroooo no es estándar. Se rompió REST
+Otro problema....
+Rest no soluciona por defecto la paginación. Mostrar algunos datos de la respuesta, si muestra todo rompor todo. Necesitaria offsets. No mostraría todos mis amigs, solo los que puedo verb
+Otro problema....
+Ordenamiento, cómo ordeno los datos que llegan
+No hay estándar para esto
+
+Si no se soluciona esto, el body de la respuesta es un choclo, tiene muchos datos, mas que los necesarios
+REST puro no escala bien
+
+Otro problema....
+¿Cómo hago para versionar mi api? ¿Cambio las urls? ¿ Pido en la url la versión? ¿En el header?
+No hay slución estándar, la que más se usa es por header
+
+Otro problema...
+Es obligatorio documentar
+
+SOAP puede mantener estado, hay casos donde es más útil que REST. No es raro verlo en bancos, aerolineas, proveen apis SOAP, es ideal para apis muy transaccionales
+Es duro. Tiene un protocolo
+There is no siver bullet
+
+REST define recursos, no acciones. REST no sirve para pedirle a una cámara que se prenda
+/cámara/id -> patch y cambio su estado, pero es muy forzado....
+--------------------------------------------------------
+
+Graph QL
+**************
+APIs GraphQL
+Lo creó facebook. Soluciona problemas que tiene facebook
+Le sirve a facebook, porque manea grafos
+
+
+¿Qué tiene?
+Da un lenguaje que permite hacer querys y mutaciones
+Es tipado -> permite evitar errores. Útil para una API, porque esta es un contrato, debe cumplirse
+Tiene validaciones
+Permite solucionar el problema de FIX y UNDERFETCHING -> Parte del estándar. No es inventado por cada uno
+Soluciona el problema de N + 1 -> N + 1 request contra el server. Ej pido data de usuario y vienen datos de la url de la imágen del usuario. Entonces debo hacer el request original para obtener la lista y N request para obtener las imágenes de los usuarios
+Una soución es devolver la lista con los usuario ya populados. En REST no hay una solución para esto.
+
+Ejemplo
+Una lista que tiene usuario, que tienen details, que tienen details privados y públicos.
+Luego quiero ver solo los públicos de cada usuario. 
+Esto REST no lo sabe solucionar de manera estándar.
+GraphQL si, de una manera estándar. Ahorra el roundtrip y varias llamadas. El server se encarga de solucionar todo por el cliente.
+
+Soluciona paginación y autenticación
+
+Peroooo...
+No soluciona el problema del caching, que si lo hace rest
+
+--------------------------
+¿Cómo se ve GraphQ?
+--------------------------
+Puedo definir tipos personalizados
+Puedo definir campos opcionales y obligatorios
+Tengo tipo de dato date, no existe en json
+Puedo indicar que un array tiene mínimo un elemento
+Da seguridad a la hora de hacer el código
+Tengo un query y un response -> Defino qué campos se van a recibir en cada request
+Funciona muy bien con REACT
+Query y Response son en JSON. Rest puedeestar encoodeado en lo que quiera, como protobuffs
+
+
+
+
+
+
+-----
+SOAP es rest solo con post
+Algunos recurso están solo en una url a la que le mando cosas con post
+post permite body y envío información con la operación que necesito -> get, patch, delete...
+-----
+
+
+tiene un sistema de capas -> si me comunico con un sistema, con otro en el medio (por x razón) ni debo enterarme de que está ahí
+------------
+Los anteriores hacen a la api más restful
+------------
+Código bajo demanda -> OPCIONAL
+  -> el código cuando le responde al cliente, puede enviarle código para que el cliente ejecute
+  Nadie lo usa ni saben para qué está
+------------
+
+GraphQL Queries
+Aliases
+Fragments -> Sacar cosas de lugar
+Variables
+Default values
+Directivas -> icluir un campo si pasa tal cosa...
+Mutaciones
+Query Caching -> En teroía, funciona distinto a REST. Depende del cliente que se user
+
+Cachear la query misma y no es response
+Envio el hash de la query completa
+Un hash equivale a la query
+Se rearma del lado del servidor
+Gano no tener que armar la query entera
+El servidor debe guardar estos datos de manera indefinida
+
+------------------------------------
+gRPC Remote procedure calls
+------------------------------------
+Entre servidores RPC era perfecto.
+Ni protobaff, ni json, envía todo el binario
+Intento de hacer que RPC funcione en todos los lenguajes
+y solucionar sus problemas
+
+Framwork de RPC -> Tecnicamente so lo msimo que RPC
+Protocol buffers seamless integration -> 
+Load balancing -> Automático a nive de cliente. El mismo cliente es el load balancer. Decide el server a pegarle
+Tracing ->
+Health checking ->
+Autenticación ->
+Cascading call-cancellation -> Si se interrumpe un request en el medio, puedo enterarme. Una implementación normal de RPC tiene timeouts. 
+Flow-control at the application layer ->
+Full-control en la capa de aplicación -> No se es cliente del servidor. Con rest ¿Cómo se hace una transmisión de video? --> debe ser full duplex
+
+Payload agnostic -> Se puede usar con json, xml, protobuff... Protobuff es de google, así que se integra perfecto. Se usa por default
+Manejo de error -> Automático
+Streaming full-duplex HTTP/2 también -> Funciona por defecto en HTTP2.
+
+
+Están definidos el response y el request
+
+--------
+HTTP2
+--------
+Después de un  primer request al servidor, se pueden hacer múltiples request en paralelo en el mismo canal.
+No es necesario abrir muchas conexiones. Se multiplexa.
+La desventaja es que los paquedes deben ordenarse en le servidor.
+
+Brilla en el mundo de la comunicación entre servicios. Entre servicios no cabian mucho los campos que se pueden recibir
+
+GraphQL brilla en el mundo del front
+-------------------------------------------------
+APIs
+-------------------------------------------------
+
+Una API es una necesidad interna, antes que externaa.
+-> No es solo para clientes que se comunican con el servicio.
+Consumir uno mismo la API. Va a mejorar
+Las apis permiten divir el sistema en múltiples sistemas que se cimunican entre si
+
+-> La API debe ser simple. En rest está todo documentado, por eso es popular
+
+Debe ser única -> Englobar todas las operaciones que se quieren hacer. No hay una api para el servicio de productos, otra para usuario, otra para búsqueda. Todo está en la misma api, en una interfaz REST
+
+
+
+
+  
+****************************************************
+ CLASE 3
+****************************************************
+Frontend
+Se usa para hablar de la página web, al sistema de cara  al usuario
+¿Por qué ocuparse del frontend?
+Por plataforma
+Para retener el cliente.
+Si el SW se usa sollo, ahorramos en capacitación
+Si las mejoras en usabilidad no traen más clientes, es un desperdicio
+
+¿Cómo se hace un a página web?
+EL browser interpreta archivos html, que solicitan carga de otros recursos, como css y js
+Títulos en html son utiles para accesibilidad
+
+Javascript -> se utiliza para mejorar la ux, request en backgrund, poder modificar el contenido e la página
+
+Permite manipular el DOM 
+El DOM es un arbol armado por el browser
+¿Entonces cada browser decide?
+Si, esto tiene un impacto grande en el negocio. Se quiere que una página funcione en todos. 
+
+¿Cómo afecta a mi negocio?
+Se necesitan herramientas pra saber que no la cagamos
+Se usan herramientas para monitorear si funciona correctamente en los navegadores
+Amplitud -> Mide estadísticas de uso por país, sabe si funciona correctamente en los navegadores, tira alertas
+
+BrowserStack -> Tipo de VM, SW de virtualización orientada a browser. Permite reproducir errores en distintos navegadores, en distintos dispositivos.
+
+------------
+Organismos contra el caos
+Widows permitó que en js se pudiera acceder  los valores de un array con paréntesis. Muchas aplicaciones creadas en esa época solo pueden correr en Internet Explorer
+
+W3C -> css, html, DOM, ECMA script -> estándar de js
+------------
+Práctica
+------------
+LocalStorage y eventListener son APIS
+Un senior sabe elegir la solución en base al contexto. Si funciona para lo que necesitamos está bien
+
+¿Es fácil mantener js?
+Es muy caótico, tiende al caos... Para trabajar con JS y tener chequeo de tipos y más estabilidad, usar typescript
+
+Performance
+¿Cuánto tiempo es aceptable para cargar una página?
+Depende de cómo aafecte al negocio. En un homebankin sería raro que cargue rápido y da menos tranquilidad.
+Si quiero competir con tictok, debo ser mucho más veloz
+
+BOUNCE RATE ->  Cantidad de usuarios que se van sin hacer ninguna interación. Aumenta con el tiiempo de carga.
+Si hay un problema en la página, ver el frontend. Es más probable.
+Amor al frontend -> ahorra $$$
+¿Cómo funciona el browser?
+html y css se procesan en paralelo
+Cuando terminan los dos, se produce un reder tree
+
+Comportamiento por defecto
+El browser encuentra un script, y detiene la carga, renderizado, hasta que se termine de ejecutar
+También lo hace cuando se piden scripts. Pide, ejecuta y luego sigue
+async -> Encola las requests
+Algunos lo ponen al final del html, para que lapágina cargue primero
+
+------------------------
+CDN Content delivery network
+------------------------
+Útil para cargar contenido estático de la página
+Ofrecen una cache geográficamente distribuida.
+El negocio no es servir CSS, ni responder request que siempre responden lo mismo. Hay gente que hace eso mejor
+ Por ejemplo, se puede usar un cdn para guardar las imágenes, así no pedirlas a la api.
+ Le anda mejor al usuario y nos ahorra plata.
+-------------------
+Clodinary
+-------------------
+Servicio que devuelve imágenes transformadas al tamaño óptimo para el cliente. Ahorramos Ancho de Banda
+
+--------------------
+Debemos entender lo que hace el browser con nuestra página
+--------------------
+Medium primero muestra el coontenido del artículo y luego el título
+--------------------
+Usar lighthouse
+--------------------
+Es una herramienta que analiza la performance de la página
+ir a terminal, consola del browser y elegir lighthouse
+Da recomendaciones sobre cómo mejorar la página
+métricas del tipo tiempo de bloqueo total (tiempo renderizado)
+-------------------------------
+
+Los frameworks de JavaScript
+-------------------------------
+Prometen resolver todo con javascript
+Manejan las transiciones entre páginas. Evitando la necesidad de cargar otro documento. Clic en link, no hace request al server
+
+Ejemplos
+--------------
+ReactJS
+--------------
+Conceptos fundamentales
+Tiene props -> propiedades del objeto que pas ami padre
+states -> estado propio
+Cada vez que se actualizan, el contenido del html se actualiza
+¿Cómo funciona?
+Hay una función render que devuelve html
+REACT genera un DOM virtual, es una copia del estado de la aplicación y cada vez que hay un cambio en las props o en el state se genera un DOM virtual nuevo(árbol) y solo se dispara las actualizaciones al DOM real del browser de la diferencia entre el DOM virtual y el real
+(Se hace un diff)
+
+Se genera el html según las acciones
+Se hace el mismo sitio que con javascript puro
+
+---------------
+Web sockets
+---------------
+socket.io -> 
+es un prtotocolo distinto de comunicación. Desde el cliente dejo una conexión abierta al server(ej heroku) por socket y mando mensajes por ahi, en lugar de hacer request http.
+Cuando el server recibe un mensaje, hace un broadcast de este a todos los clientes, menos al que lo mandó
+
+Problema, requiere memoria del lado del cliente
+
+un servidor de nodejs, para  correr javascript en la compu
+
+--------
+¿Qué pasa con la navegación usando REACT?
+--------
+Se ocupa el browser, se puede ir hacia adelante y hacia atrás en la historia. Si la navegación se hace 100% con js, react no se encarga de manera predeterminada. Solo se encarga de hacer el dom virtual.
+Se usa una librería de naavegación (ej REACT router)
+PAra hacer una single page applications, hay que tenerlo en cuenta
+
+-------
+¿Y si no usamos javascript?
+-------
+La ventaja que trae es que los motores de búsqueda agregan a sus resultados lo que aparezca en el html y esté relacionado con la búsqueda.
+Si una aplicación responde una div pelado y un script, la página no va a aparecer en los resultados de búsqueda
+
+-------
+¿Cómo aparezco en los resultados de búsqueda si tengo una página REACT?
+-------
+SSR Server Side Rendering
+
+Server en el medio que haga primer rendereado.
+Al primer request que hace el usuario se contesta la aplicación y todo el html de la página.
+Sirve para aparecer en los resultados de búsqueda, pero devuelve una página pesada y alguien va a pagar mucha platita $$$. Útil para que la página sea visible en browsers que no soporten js
+
+
+Se agrega un servicio que interpreta el JS, devuelve html tradicional y además sirve la app. De manera que las navegaciones siguientas las realice el cliente.
+
+----------------------------
+SPA Single Page Application
+----------------------------
+REACT sirve para esto
+Con la primer request se pide la mayor parte del contenido, el resto de las request trae json para actualizar parte del contenido
+El routeo es artficial. JS tiene una biblioteca para esto (Location)
+Se cambia la URL, pero no cambia la página
+
+A wikipedia no le sirve una SPA
+Al tp si, mejora la experiencia de usuario
+
+Ventajas
+----------
+Transiciones fluidas
+Luce como una aplicación
+Request dentro de la app son más livianas
+Bien aplicado y en el escenrio correcto mejora la UX
+
+Desventajas
+--------------
+Se lleva pésimo con SEO
+Difícil manejar las rutas/ historial
+Alta complejidad del lado del cliente
+El primer request carga gran parte de la app
+
+-----------------
+¿Qué es reactividad?
+-----------------
+Permiten declara el modelo y cambiar solo lo que cambión
+
+
+------------
+¿Y si quiero enviar actualizaciones  a mis clientes?
+------------
+Polling -> Preguntarle al servr cada cierto tempo si tiene algo para mandar
+Desventaja
+Genera un exceso de request. Mucho overhead
+
+Long polling -> Hacer un request al servidorr y si no tiene nada que devolver, se deja la conexión abierta.
+Desventaja
+No es performante
+
+WEB-SOCKET ->
+Abrir una conexión full duplex entre cliente y servidor. Es un socket abierto. La información dentro no está comprimida. 
+Limitaciones
+Es que el server debe soportarla para todos los clientes
+Las reconexiones son un problema. Se pueden tener problemas con firewalls
+
+SSE -> SERVER SET EVENT 
+La inicia el cliente, pero es unidireccional. EL cliente no puede hablar con ell servidor, solo el servidor al cliente.
+Está buena para notificaciones.
+Se puede meter en casi cualquier servidoor.
+
+-------------------------------------------------
+UX - Responsive
+-------------------------------------------------
+Bootstrap para hacer responsive las páginas
+La filosofía es desarrollar primer en mobile y luego enscalar.
+
+Reducir la curva de aprendizaje
+-------------------------------------------------
+Backend for frontend - BFF   -- PATRÓN --
+------------------------------------------------
+Es una capa entre la api y los servicios
+Abstrae al programador de tener que conocer todos los servicios y de su complejidad
+Siempre debe haber un backend del frontend para transformar los datos llamado BFF
+No pegarle a las apis desde el front, porque
+
+Después apareció AJAX -> Hace request al servidor de forma sincrónica
+
+****************************************************
+ CLASE 4
+****************************************************
+ Infraestructura tradicional
+ 
+ ¿Qué es infraestructura?
+ Todo lo fisico que de soporte a la aplicación
+ Red, servidores...
+ 
+ Hace 10 años...
+ Una aplicación monolíticacon con base de datos, poco frontend
+ browser -> internet -> servidor de la app con un tomcat -> BD
+ 
+ Todos los equipos los maneja la empresa
+ 
+ Cada vez que se toma una decisión de diseño, pensar si es necesario -> No escalar la app desde el día cero, no vamos a tener ninguna ganancia.
+ Primero preguntarse si la app escala
+ ---------
+ Debo atender a más usuarios
+ Lo primero que se puede hacer es usar un load balancer y repartir la carga entre dos servidores
+ 
+ Desventaja
+ Este es un single point of failure SPOF
+ Punto en la arquitectura que si falla, hace que caiga el sistema
+ 
+ Agregar componentes trae más complejidad y más administración y eso se paga $$$
+ ----------------------
+ ¿Qué es performance?
+ ----------------------
+ Cantidad de trabajo útil completado por un sistema
+ Se puede medir con el tiempo de respuesta ->
+ de experiencia de usuario final
+ de servicios de a aplicación
+ 
+ Hacer mejoras en performance que sea útiles para el usuario y mejoren su experiencia. Ellos pagan nuestras investigaciones
+ 
+ --------------
+ Escalar el servidor
+ ---------------
+ Comprar más memoria -> tiene un límite
+ 
+ Escalabilidad
+ --------------
+ Propiedad de un sitema de adaptarse al crecimiento del uso (mayor throughput), manteniendo la calidad de servicio o tiempos de respuesta (perforance)
+ 
+ Cuando los servidores empiezan a decaer en performance, puede producirse un efecto en cadena degradando todo el sistema  -> si nos hacen un request que tardamos mucho en responder, los siguientes van a estar demorados.
+ 
+ Picos de carga implica mayor uso de recursos, luego está en desuso -> Si agregamos memoria, seguramente no la saquemos nunca. Es dificil de instalar.
+ Debemos tener estimaciones del uso en infraestructura tradicional
+ 
+ Si invertimos para poder soportar la carga, que es ocasional, puede suceder que luego no se usen esos recurso o que vayamos a tener pérdidas y no podamos compensar lo invertido
+ 
+ --------------------------
+ Tipos de esccalabilidad
+ --------------------------
+ 
+Vertical -> Más potencia a las mismas máquinas. Podemos reutiizar la infraestructura, pero tiene un límite físico
+
+Horizontal -> Agregar más nodos. Más servidores.
+Lo bueno es poder agregar nodos de las mismas configuraciones, sin gastar tanto. 
+No es gratis, los nodos entran en conflicto. Los componentes se entorpecen. Por ejemplo, los request a la BD tardan más, el load balancer agrega overhead
+--> Clustering -> tener grupos de servidores
+            Para garantizar la alta disponibilidad para asegurar el up time. La técnicca que se puede uar para mantener la performance es Load balancing
+
+--------------------------
+Alta disponibilidad
+--------------------------
+Habilidad del sistema de continuar funcionando luego de que falla uno o más servidores
+Se mide en cantidad de nueves 99.99%
+UP TIME -> porcentaje de tiempo que el sistema está online. 
+
+Disponibildad = tiempo entre fallas / (tiempo entre fallas + tiempo de recuperación entre fallas )
+
+No hay un sistema que esté 100% disponible
+Cada nodo que se agrega es exponencialmente más caro
+Pensar si es necesario estar disponibles, entender su uso -> 100% disponible no es igual al 100% deltiempo, es según el horario del cliente
+
+---------------------
+Estrategias de deploy
+---------------------
+Para evitar caidas del server
+
+Canary deploy -> No deployar en todos los servidores al mismo tiempo en todos los servidores. Deplyar en un servidor y monitorearlo. Si no tiene errores, se deploya en el resto de servidores
+
+Blue Green Deploy -> Se necesitan dos cluster de servidores.  Se deploya una nueva versión de la app en un cluster. Cuando esté listo, se apaga el otro cluster y se intercambia a este cluster y se redirecciona el tráfico
+
+A/B TESTING -> se sube una funcionalidad y solo se muestran a un grupo de usuarios.
+Si el feature no es el esperado, es fácil deshacer.
+Si funciona, se le dda más proporción de uso
+Si vamos a esperar que todo el  muno esté de acuerdo con un cambio, no vamos a cambiar nunca.
+Al elegir usuario ramdom, podríamos perder clientes importantes por mostrarle feature que no  funcione 
+Sirven para medir el negocio. Estudiar decisiones de usabilidad, de aceptación de cambios, de impacto en el negocio.
+Se pueden hacer experimentos.
+
+
+Diasble features -> Se usaba con los monolitos. Por una cookie, etc se muestra una feature.
+Es más selectivo con los usuarios.
+Si estamos muy inseguros con el feature, es mejor subirlo deshabilidato 
+ 
+ 
+ ------------------------------------
+Ghost replication
+ ------------------------------------
+ Cada operación realizada en una BD vieja, impacte en la BD nueva y en el momento seguro, intercambiamos una por la otra. Es como el Blue green Deploy.
+ 
+ -------------------------------------------------
+LABORATORIO
+ Docker compose -> levantar un clustersito de servidores. Luego agregar un liad balancer NGNex
+ 
+ ¿Por qué pierdo la sesión si cambio el server? Porque la sesión está en ese servidor
+ 
+ ------------------------------------
+ Load balancing
+ ------------------------------------
+ Es el proceso de de distribuir eficientemente el tráfico de red entre mpultiples servidores
+ Es la manera mpas directa de escalar una aplicación. Permite tener más servidores
+ 
+ PROBLEMAS
+ Si la aplicación es statefull va a tener problemas para guardar las sesiones. Si es stateless no pasa nada
+ 
+ Tipos
+ -------
+ Físicos -> Muy potente. Excelente, pero muy caro. Son dificiles de escalar. Tienen un límite
+ Software -> Se levanta en un HW y cumple con las mismas funcionalidades. Ej ngnex
+ 
+ Se pueden combinar -> HW físico para balancear el tráfico por internet y los de SW para el ecosistema de microservicios. Son lo mejor de los dos mundos
+ 
+ -----------------------------
+ Algoritmos de load balancing
+ -----------------------------
+ Round robin -> Se hace cuando el cliente puedde caer en cualquier servidor
+ El más efectivo. No coonsume tantos recurso
+ 
+ Decisión por métricas -> cantidad de conexiones, tiempo de respuesta, ancho de banda. Levar registro de las métricas requiere uso de memoria y procesamiento
+ 
+ IP hash -> Se usa si el cliente debe car en el mismo servidor
+ Tiene problemas con las colisiones. Podría sobrecargar pocos servidores
+ Si hacemos un routeo por ip, siempre se va a caer al mismo servidor. Estamos perdiendo lo que gananmos con tener varios servidores. Si se cae ese servidor, se pierden los datos en la sesión y no se puede direccionar el tráfico de ese a los demás servidores
+ 
+ Problema -> los load balancer reciben más carga de la que puede manejar un servidor, recibe la de todos
+ 
+ -----
+ Apps globales -> Guardan sesiones por región. No replican la sesión en todo el mundo. Si un cliente se mueve de región, pierde la sesión. No vale la pena solucionar eso, porque es mu raro cambiar de región
+ 
+ SHARDING -> no hay intersección entre los conjuntos de usuarios, entonces cada grupo puede tener sus propios load balancer, datacenters, etc. Permite escalar horizontalmente
+ -----
+ 
+ -----------------------------
+ Stateless vs statefull
+ -----------------------------
+ Según si se requiera guardar el estado de la sesión o no, se elegirá la estrategia de balanceo.
+ Si la app no puede soportar que se pierdan esos datos de sesión, se debe pensar cómo replicar la sesión
+ 
+ La replicación genera overhead en los servidores y en la red. 
+ Las sesiones ocupan memoria. No permite escalar. Se atenderán la misma cantidad de usuarios aún teniendo más servers
+ 
+ Stickiness -> lograr una afinidad entre un request y un servidor. La sesión siempre va a estar en el mismo servidor. El problema es que si se cae, se pierden los datos de sesión.
+ La carga siempre está asignada al mismo servidor. Pueden sobrecargarse solo algunos servidores
+ 
+ Replicación de sesión -> Una sesión está replicada en un pool de servidores. Hay más protección ante la caida de servidores
+ 
+ 
+ Replicar es caro -> implica tráfico de red y ovearhead
+ 
+ Caida de Caché -> no necesita tanta protección ante caidas
+ ------------------------------
+ Ngnex -> la versión gratuita no tiene sticky session
+ ------------------------------
+ Replicación
+ +
+ sticky session
+ No replico a todos los server
+ -----------------------------
+ Tipos de replicación
+ -----------------------------
+ Sincrónica -> Cada vez que se hace un cambio en la sesión, se replica
+ Asíncrona -> Se repplica cuando se responde el request al cliente
+ 
+ Triggers de replicación
+ -----------------------------
+ SET -> se replica la sesión en el momento que se necesite. El más rápido
+ SET_AND_GET -> Es lento, replica innecesariamente con los get
+ SET_AND_NON_PRIMITIVE_GET -> de un objeto no primitivo, como objetos calculables, en caada get generan algo nuevo
+ Los objetos de int, bool, siempre dan el msimo get 
+ ACCESS -> cada vez que se accede a la sesión, se replica. Es el más lento de todos
+ 
+ Granularidad de replicación
+ ------------------------------
+ ATRIBUTE -> solo se replican los atributos sucios con timestamp
+ 
+ SESSION -> se replica toda la sesión
+ 
+ FIELD -> solo viajan los campos modificados
+ 
+ -------
+ Redis -> BD para sesiones
+ Es muy rápido
+ -------
+ 
+ 
+ -----------------------------
+ Content Delivery Network
+ -----------------------------
+ Todo el contenido estático, sacarlo fuera del servidor. Así se calcula una sola vez.
+ El browser primero busca en el CDN 
+ Caché para contenido estático
+ 
+ Reduce la carga de los servidres -> no hay que buscar el contenido para mandárselo al usuario
+ Reduce el tráfico de la aplicación
+ incrementa el ancho de banda -> el contrnido estático no ocupa el ancho de banda del datacenter
+ reduce la latencia -> hay cdns repartidos geográficamente distribuidos. Si están más cerca del cliente, este recbe respuestas más rápido
+ mejora el web caching -> más fácil de cachear, los servidores no están actualizando todo el tiempo
+ 
+ -----------------------------
+ Mecanismo Failover
+ -----------------------------
+ Para lograr alta disponibilidad, es muy importante esto
+ 
+ Failover -> La Habilidad de que las conexiones del cliente migren de un servidor a otro, en eventos de fallas de servidor. Permite que las apps clientes pueden continuar operando. Puede ser que elclietne tenga que hacer acciones extra para recuperarse
+ 
+ Transparent failover -> El cliente no se entera de la caida del servidor. El balanceador redirige el request a otro server disponible. 
+ Puede ser a nivel request o nivel server
+ 
+ ---------------------------------
+ Antipatrones para clusterización
+ ---------------------------------
+ SINGLETON -> Un singleton con un mapa de sesiones funciona para guardar sesiones, pero solo si se cae en ese servidor y en esa instancia. No funciona en clusterización
+ Puede guardarse aparte para resolver esto, en un redis y que todos los servers tengan acceso 
+ 
+ Servicios remotos sin cachear -> Se agregan servidores, pero la base de datos sigue siendo una. Replicar un bd es muy complicado y lento, escalarla también.
+ Debemos cachear recursos a utilizar. 
+ Una api también debería estar cacheada para reducir los cuellos de botella. No guardar todos los datos, solo algunos.
+ 
+ Preocupaciones
+ -----------------------------
+ Eficiencia en el uso de memoria -> no guardar todo.
+ Separar lecturas de escrituras.
+ Las lecturas no son tan pesadas
+ Invalidación de entradas -> ¿Cuándo la información se vuelve inválida? Ej. un producto quee se guarda 10 días en la cache y clientes lo tienen en su carro. Si se borra de una cache, los clientes lo pierden
+ 
+ Subir al cdn versiones correctas, porque luego hacer que se baje la versión correcta es dificil.
+ 
+ 
+ -----------------------------
+ Hardware vs virtualiado
+ -----------------------------
+ Máquina o docker
+ Cluster físico vs virtualiado -> En un servidor se pueden levantar muchas instancias
+ Solo virtualiar en un servidor trae el problema de que si se cae un server, se pierden todos los servers
+ 
+ Malos vecinos -> una vm degrada las demás
+ 
+ Costo bebenificio -> se puede escalar usando un servidor viejo con instancias de servidores virtuales
+ 
+ ------------------------------
+ Desventajas de clusterización
+ ------------------------------
+ Distribuyen los problemas...
+ 
+ 
+****************************************************
+ CLASE 5
+****************************************************
+ Docker 1/2
+ -----------
+ 
+ ¿Qué es docker?
+ Posibilita empaquetar una apicación con todas las dependencias en una unidad etandarizada de desarrollo de SW
+ 
+ Ej incluye la jdk, certificados, bibliotecas
+ 
+---------------------------------------
+ Ventajas
+ --------------------------------------
+ * Los contenedores corren en el mismo entorno sin efecto de lado 
+ 
+ Antes -> aplicaiones que corren en e mismo server, mismo tomcat o más de un tomcat en cada máquina
+ 
+Después del antes -> Máquina grande para cada capa y vitualización para cada capa, pero tiene overead porque se elvanta un sistema operativo, más trabajo en cpu, aunque hay ambiente aisado
+ 
+ Ahora -> Docker -> aisla los procesos
+ Usa la tecnología LXC linux containers
+
+ Servidores privados virtuales VPS, entornos virtuales VE
+ Permiten generar un namespace para el proceso, aislado de otro namespace
+ 
+ Saltos de fe pequeños -> Docker garantiza que lo que se corre en un ambiente se va a correr igual en otro, a diferencia de un tomcat con un war deployado.
+ Hay menos variables, menos cosas que pueden fallar. Es u proceso más robusto
+ 
+ Es una herramienta popular y bien mantenida. 
+ 
+ Infraestructure as a code -> describir la infraestructura de la aplicación con código (antes puppet, ahora docker)
+ 
+ Permite versionado y rollback. Si algo sale mal, se puede volver rápido a la versión anterior.
+ Hacer un port de java 6 a java 8 puede fallar
+ 
+ Cuando se crea un container se crea un espacio para lectura y escritura
+ Cada capa se basa en la anterior, no son independientes
+ 
+
+Es eficiente en el manejo de disco -> se basa en dos tecnologías
+stackable image layer
+copy and write -> para escribir primero hay que compartirlas
+
+Un delete no cambia el tamaño de container, solo marca el archivo como borrado
+
+Desventajas
+------------------------
+Archivos grandes y estructuras con muchos directorios afectan la performance al copiar
+Una buena práctica es que el container evite la escritura en disco. 
+Si se tiene que escribir mucho en un cotainer, se tiene que usar un data volumen
+
+Data volumen -> es un punto de montaje
+El data volumen persiste, mienstras lo que se almacena en el conatiner es efímero
+Lo que se almacene puede operarse a la velocidad nativa del host
+Los archivos pueden verse dentro del contenedor, pero para leer o esribir no hay que recorrer capas
+
+Es una unidad de red, pueden aceder varios container a la vez
+Un ejemplo de uso es para almacenar los logs de todos los containers
+
+BASE DE DATOS -> Son una excepción, las bases de datos relacionales no están preparadas para tener varias instancias
+corriendo a la vez. Es complejo distribuir la carga
+Sonla excepción a las 
+
+
+#Container
+
+ Cada instrucción en el docker file genera una capa. Cada capa tiene un hash
+
+ Si se hace una lectura de un archivo se busca en la capa read/write y si no está se desciende en el filesystem para buscarlo, hasta la raíz
+ 
+
+
+ 
+ 
+ ¿Cuál es la diferencia con una maquina virtual?
+ LXC, se parece a una máquina virtual, para la app es una máquina, pero el contenedor corre al lado de otros procesos
+ Provee un espacio de procesos y una red para los processos dentro del contenedor
+ 
+ 
+ Conceptos
+ -----------
+* Un container no crea un espacio virtual vacio y se empieza a poner procesos ahí...
+* El containes el una capa read/write sobre la imagen
+* Efímero
+* Aislado del resto
+ * Con namespaces tienen su interfaz de red, puntos de montaje
+ * cgroups -> Grupos para repartir recursos de la computadora
+
+ #Imagen
+ capas read only (es el file system)
+* Define los paso para generar el ambiente (container)
+* Derivados de una imagen base (busybox, ubuntu...) Es el FROM en el docker file
+* Armadas de un conjunto de capas que combinadas forman e file system (cada línea en el docker file)
+* Cada capa es hasheada y cacheada
+* Construida a partir de un DockerFile
+* Es read only
+
+Diferencia entre imagen y container -> capa read write
+ 
+ #File system de docker
+ Cada capa es un delta sobre la capa anterior
+ Cada capa es read only
+ Cuando se crea un container
+ 
+ cmd (command) -> implicitamente indica que ejecute sh
+docker build -t <unNombreTag> -> crea tags que apuntan a una imagen buildeada
+
+RUN -> los comandos run se concatenan en una sola linea
+
+Dockerhub es un registry -> almacena imágenes, como un github
+
+
+
+
+****************************************************
+ CLASE 6
+****************************************************
+ 
+  ****************************************************
+ CLASE 7
+ ****************************************************
+ Virtualizar -> Utilizar lo mejor posible los recursos físicos
+ VM, hipervisor (capa que maneja las máquinas)
+ 
+ Beneficios
+ ----------
+ Reduce los costos. Utilizamos aún mejor la misma máquina
+ 
+ Miniza el tiempo de downtime -> Esto funciona hasta que se cae el hw físico
+ Mejora la productividad, la eficiencia, la agilidad y la respuesta de it -> Si necesitabamos un 2da máquina se requería pedir presupuestos, instalar comprar. Mejora ese tiempo de respuesta
+ Acelera y simplica el aprovisionamiento de aplicaciones y recursos -> Si necesitamos más recursos, solo creamos una máquina virtual nueva
+ Soportamos business continuity y disaster recovery-> Como no hay solo una máquina, mejoramos la respuesnta ante una catastrofe
+ Permite manejo centralizado -> La máquinas virtuales se pueden administrar de manera centralizada con herramientas
+ 
+ Desventajas
+ ---------------
+ Hay más capas entre el hw y las  aplicaciones. Si las palicaciones son intensivas, podemos tener problemas de recursos, por la cantidad de máquinas corriendo en la misma
+ Vecinos molestos -> Un servivio puede funcionar mal porque otro servidor en el mismo hw físico lo interrumpe
+ Es dificil de solucionar y de detectar este error
+ 
+ ------------------------------
+ Cloud computing
+ ------------------------------
+ Un modelo que da acceso on demand a un pool compartido de recursos computacionels que puede ser rápidamente provisto, con baja o nula interacción de l proveedor de servicios
+ 
+ Los recursos pueden ser
+ network, servers, storange, servicios....
+ 
+ Beneficios
+ -------------------
+ Se puede escalar rápidamente, elásticamente
+ Crítico para tener alta disponibilidad
+ Tener los servidores para atender el máximo pico todo el tiempo es caro, se necesitaría mucha gente (sys admin), las máquinas pierden valor. 
+ La gente que administra cloud es experta en el tema
+ Distribuido geograficamente -> los datacenters están en distins lugares geográficos. Reduce la latencia y permite mejorar el uso de las aplicaciones al cliente
+ Puedo empezar con bajo costo e ir creciendo
+ Fácil de evolucionar / "Refactorizar" -> Si la aplicación se vuelve más compleja, se puede i tercerizando
+ 
+ Hosting tradicional -> se contrataba una máquina enera
+ Cloud -> Se esacala solo lo necesario, sin burocracia y con rapidez
+ 
+ Características de cloud
+ ------------------------------
+ on demand self service ->
+ Acceso a travpes de internet -> No es necesario ir personalmente a los datacenter. La administración y el us es por internet
+ Resources pooling -> Los recursos están compartidos entre los clientes. Así el proveedor amortiza los costos mejor. El crecimiento le da la capacidad de rotación.
+ Al cliente le permite un acceso barato a los recursos
+ Rapid elasticity -> Capacidad de escalar para soportar picos de tráfico. 
+ Measured service -> La factura crece con el uso. si el negocio no crece, no gastamos. Bueno para startups
+ 
+ ¿Por qué no correr en nuestras propias máquinas?
+ -------------------------------------------------
+ Hay costos de mantenimiento
+ El uso de recursos no está centralizado. Hay que administrar los servers uno por uno
+ Poca capacidad de respuesta ante picos
+ El uso de recursos no es óptimo. No se aprovecha el 100% todo el tiempo
+ Performance -> 
+ Productividad -> se necesita personal especalizado en los servidores propios. 
+ Reduce la capacidad de enfocarse en el core del negocio
+ Es mejor que se encargue otro, nuestra solución no puede ser tan buena.
+ Confiabilidad -> Nuestro negocio no puede tener gente tan confiable como la que tienen los servicios cloud
+ Escalabilidad y elasticidad -> Con infra tradicional, no se puede retroceder al escalar
+ Seguridad* -> 
+ 
+ Desventajas
+ -------------
+ La empresa no controla los datos. Si el core del negocio es proteger la información, no debe usarse cloud. EJ bancos, la legislación los obliga a tener los datos localmente
+ Dependencia de un externo. Si se cae la plataforma cloud, no hay plan B
+ Si la empresa crece mucho, podría llegar a ser más barato tener un datacenter
+ Hay menos flexibilidad, solo pueden usarse las máquinas que ofrece el proveedor
+ El proveedor del servicio cloud podría convertir en competencia -> mercado libre y amazon
+ Hay implicancias a nivel contable -> activo vs resultado negativo
+ Vendor locking -> cambiar de proveedor de servicio cloud puede no ser tan fácil. Hay un acoplamiento con el proveedor
+ 
+ ------------------------------
+ Flavors
+ ------------------------------
+ on premise - infraestructura tradicional -> 100% de la empresa, nada de 3ros
+ 
+ cloud
+ -------------------------------------------------
+ IAAS
+ -------------------------------------------
+ Dan vms, servers, load balancers, redes
+ Infraestructura como servicio bajo demanda. 
+ 
+ pros
+ ----
+ Puedo hacer lo que quiero -> correr procesos, instalar paquetes, levantar cualquier lenguaje o aplicación
+ Fáciles de usar para aplicaciones que ya estaban es uso, fácil de portar la app porque se puede personalizar a gusto
+ Si no se quiere tener el servicio caido durante la migración a cloud, este es ideal
+ 
+ 
+ contras
+ -------
+ Máquina pelada...
+ Escalabilidad manual. No hay mecanismo de escalabiliad provistos por el proveedor
+ Es necesario tener administradores especializados (dev ops) 
+ Si se quiere instalar servicios de terceros, hay que pagar las licencias
+ 
+ -------------------------------------------
+ PAAS
+ -------------------------------------------
+ Entrega los ambientes de ejecución, las BD, los web servers, las herramientas de desarrollo. La empresa maneja la data y la aplicación. 
+ 
+ Plataforma computacional que permite la creación de apps web rápida y fácilmente sin la complejidad de comprar y mantener el software y la insfraestructura por detrás
+ 
+ Trae soporte para desarrollo colaborativo
+ 
+ Herramientas para manejar el cobro y las suscripciones
+ 
+ pros
+ ----
+ Perfecto para Startups -> permite lanzar rápido las apps
+ -> Hay proveedores que no cobran si el uso es bajo
+ Generan una abstracción, no hay que enfocarse en la configuración
+ 
+ Pueden autoescalar de forma automática, load balancing incluido
+ Menos costo de mantenimiento. Ya no es necesario actualiar el entorno, solo es necessario concentrarse en el desarrollo de la app. Ya no es necesario tener perfiles especializados. Puedo tener pocos perfles, pero muy buenos en lo suyo
+ 
+ Tenemos poco conocimiento de la infra y las licencias -> tiramos código y sale andadndo, no necesitamos ocuparnos de pagar licencias. Menos preocupaciones
+ Servicios provistos por la plataforma. 
+ 
+ contras
+ -------
+ No podemos usar tecnologías que no soporte la plataforma. Por ejemplo, un lenguaje de programación, hilos, sockets. 
+ Para el proveedor, es una ventaja, porque le permite administrar mejor, las limitaciones son para no afectar a otros clientes
+ Request con timeouts
+ Las BD dependen de la plataorma
+ No es aplicable a cualquier framework, porque quizáas se basa en una jdk específica que no soporte la plataforma
+ Las versiones del sw instalado que se pueden usar son las provistas por el PaaS
+ Es más dificil migrar. Mucho acoplamiento a la plataforma. 
+ Si las platform soportan docker, si es factible migra de proveedor
+ Genera vendor locking
+ 
+ 
+ -------------------------------------------
+ SAAS
+ -------------------------------------------
+ Email, CRMs, virtual desktop, es el producto completo. La empresa no maneja nada
+ Acceso web a SW comercial
+ El proveedor provee una licencia a la aplicación, como un servicio on demand
+ Generan ingresos por publicidad 
+ Modelo one-to-many
+ los usuarios no tienen que encargarse de actualiaciones, ni parches
+ Se maneja desde una ubicación central
+ 
+ Ej. Aplicaciones para pagar sueldos, gmail..
+ 
+ Contras
+ --------
+ Las información la almacena el proveedor
+ 
+ 
+ ¿Cuándo usarlo?
+ Tiene sentido cuando no se necesita personalizar el software, para newletters
+ Si necesito una solución que no está relacionada con el negocio, ej mandar mails
+ Cuando se requiere software por un período corto, mientras se desarrolla la solución in house
+ SW con altos picos de demanda una vez por mes, como pago de sueldos, impuesto
+ 
+ ¿Cuándo no usarlo?
+ Cuando se requiere procesamiento rápido en tiempo real
+ Donde exista una regulación o legislaciones que prohiba tener data hosteada por 3ros
+ Donde ya exista una solución en la empresa (on premise) que funciona
+ 
+ 
+ -----------------------------------------------------
+ Cloud - Pricing
+ -----------------------------------------------------
+ Medio engañoso
+ 
+ 
+----------------------
+Nuevas tendencias
+----------------------
+FAAS -> Function as a service, ej Lambda de AWS
+no importa tener el servidor ni el tomcat, solo importa tener una función y que cuando llegue un request, se ejecute
+
+BAAS -> Backend as a service
+Hay muchos problemas comunes a la mayoría de aplicaciones
+Nos conectamos al servicio y ahorramos tiempo en resolver problemas básicos, por ej conectarse a un aBD, pantalla de login
+
+
+ ****************************************************
+ CLASE 8
+ ****************************************************
+ Microservicios + Refactor
+ --------------------------
+ 
+ Aplicaciones monolíticas
+ Aplicaciones que fueron pensadas como toda la solución.
+ Quizás en el contexto inicial era correcto, luego el mismo cambió agregando más responsabilidades
+ 
+ Ventajas
+ ----------
+ Son simples -> código en un solo lugar. Se deploya un solo artefacto. Para hacer tests, se levanta la app en la máquina
+ Baja la latencia -> microservicios son muchas aplicaciones que se comunican entre sí. Una tarea en un sistema de microservicios tiene que hacer saltos por la red. Mucha latencia
+ En pequeña escala aprovecha el uso de los recursos humanos, el equipo está enfocado y conoce todo el código
+ Es fácil agregar funcionalidades que hagan uso de lo que ya hay, como BD, servicios ya implementados
+ 
+ Problemas
+ ----------
+ Los deploys se vuelven más grandes. Con un solo bug, hay que volver todo para atrás y no deployar
+ Mientras más tiempo pasa, más código fue agregado
+ 
+ No escala en cantidad de gente, más de 10 personas tocando el mismo código genera muchos conflictos. Las tareas son dependientes y los programadores se bloquean entre ellos
+ Tiempos altos para testear, construir, deployar... Binario grande
+ Código legacy (código en deshuso) convive con el códig nuevo. Dificil convncer a otros de que vale la pena quitarlo, porque no beneficial al usuario
+ 
+ GC strom -> La aplicación pasa más tiempo corriendo el garbage collector, que respondiendo request. 
+ Leak de memoria -> Son difíciles de encontrar
+ Uso intensivo de cpu -> el código legacy puede hacer mál uso. Afecta a todo el resto
+ 
+ Frontera entre módulos -> Al principio, el equipo tenía muy claro cómo se dividían los módulos, pero los cambios de gente hace que sea más fácil escribir código nuevo, que entender el que ya está. Puede suceder que el código se duplique
+ Funcionalidades diferentes, requieren infraestructura diferente -> Distintos casos de usos, ej io intensive no necesita que los hilos estén esperando la respuesta, permite atender request de forma paralela. Una app Cpu extensive exige mucha cpu en cada request. Balancear ambas es dificil
+ Diferentes funcionalidades requieren diferentes configuraciones -> ej distintos SO, distintas versiones de la jdk, distintas bibliotecas
+ Toda la aplicación está hecha con tecnologías similares -> Es más dificil cambiar partes del sistema  si se ecesitan versiones nuevas de estas
+ Fuerza a usar estas para problemas que no resuelven, por ej BD
+ Al momento de hacer un deploy tiene que haber un tpecnico de cada parte, porque hubo mucha gente tocando el código. Cada uno debe mirar distintos logs
+ Testeo de funcionalidad -> No todos saben cómo testear la funcionalidad. Se requiere más gente
+ Saber qué sucede en caso de encontrar un problema -> La gente involucrada en el deploy de cada feature debe estar involucrada para decir qué hacer, sino es dificil saber si un problema grave o no
+ 
+ Deploys disruptivos -> hace que lo que está funcionando, deje de funcionar. Ej cambiar la BD de cache
+ Si cada vez que se hace un deploy tiene que estar todo el equipo mirando, que no haya nadie usando el sistema por la probabilidad de errores, hace que el equipo empiece a evitar el deploy. Es malo porque el equipo no querrá agregar features nuevas
+ 
+ Retrocompatible -> Que funciona con lo que ya está en el sistema
+ 
+ 
+ ---------------------------------------------------
+ Pasar de monolito a microservicios
+ Esto es un hack
+ ---------------------------------------------------
+ Balanceador de carga delante de los clusters.
+ Se deploya el mismo artefacto en dos cluster distintos
+ y configurar los cluster para responder distintos tipos de request, por ejemplo de frontend y de backend
+ según la url. 
+
+ 
+ -------------------------------
+ Ejemplo de un sistema monolítico
+ y cómo pasar a micro servicios
+ -------------------------------
+ Como Garbarino...
+ Hay funcionalidades y capas bien definidas.
+ 
+ Iteración #1
+ 30 personas tocaron el mismo código y hay un deployable gigante
+ Hay un gran ciclo de bug fixing -> El tiempo para arreglarlo es mucho mayor que el de crear el TESTING
+ 
+ Forma de trabajo
+ ---------------------
+ Se sigue un modelo iterativo incremental porque permite agregar valor sin detener el sistema.
+ La arquietectura debe evolucionar componente a componente
+ 
+ No se puede detener el sistema mientras el monolito se covierte a microservicios.
+ No convence a otros
+ Hay features que no peden esperar a ser hechos, ej afip impone un impuesto
+ 
+ 
+ Iteración #2 -> empezar a pensar el micro servicio
+ 
+ Tomo un apecto del problema, por ej catálogo
+ Creo una caja que haga esa parte, la pruebo y la comparo con lo enterior
+ Lo integro desde a aplicación monolitica sin eliminar lo viejo -> porque si el servicio nuevo no responde como queríamos, es importante poder retroceder a una etapa anterior
+ 
+ Las pruebas de código son muy importantes, la probabilidad de agregar errores es muy alta -> Tener errores puede provocar que se cancele el proyecto de migrar a microservicio, se pierde confianza de los gerentes
+ 
+ Ganar confianza para pasar a microservicios -> Demostrar que da valor, un quipo de 30 da 2 personas dedicadas full a que el catálogo sea el mejor posible
+ 
+ Balanceo desde la aplicación monolíticia al nuevo servicio. Los clientes nuevos los podemos usar como conejillos de indias y usen lo nuevo, de a poco dejar de usar lo viejo y luego eliminarlo, cuando se esté seguro.
+ ------------------------------------------------------
+ ¿Qué pasa si necesito agregar nuevos features mientras migro a microservicios?
+ ------------------------------------------------------
+ Tratar de que el microservicio responda la menor cantidad de request posibles
+ 
+ - Decidir no agregar featuras nuevos mientras dure la migración
+ -El fueature nuevo lo agrego al microservicio y al monolito
+ Potencialmente hay bugs en ambos
+ -El nuevo requerimiento se codeda en el servicio nuevo y los clientes usan la versión nueva. La desventaja que no se está seguro de que el servicio soporte a todos los clientes (el tráfico de producción)
+ 
+ 
+ Si hay bugs en la versión vieja, si o si arreglarlo. ¿Cuándo se traslada la corrección de ese bug a la versión nueva si es que lo tiene?
+ 
+ --------------
+ ALTERNATIVA
+ --------------
+ Paso un año construyendo el sistema de microservicios y cuando esté listo, pasar al sistema nuevo
+ 
+ Desventaja
+ Un año de gente que no estuvo metiendo feature, sin tráfico que se estuvo probando
+ 
+ -----------------------------------------------------------
+ Consideraciones sobre los refactor de arquitectura
+ -----------------------------------------------------------
+ Algunos refactor son disruptivos, ej cambibar de base de datos que maaneja sesiones que se pierdan todas las sesiones viejas
+ Si estamos haciendo cambios disruptivos en el sistema nuevo de microservicios y un usuario lo usa, quezás nunca más pueda usar la aplicación vieja. Hay casos en los que no hay forma de darle soporte
+ Hay que limitar estos cambios.
+ 
+ Si se puede hacer AB Testing y un despliegue paulatino, probar las cosas, no hacer un switch y pasar a usar lo nuevo sin probar
+ Si no se puede hacer muchos Tests (funcional, de carga, etc.)
+ 
+ Otras tareas incluyen migración de datos, los dos modelos pueden convivir. Ej deprecar un dato que devuelve  una api y cuando se esté seguro, quitarlo
+ 
+ Puedo hacer cosas que no me gustan de forma temporal, como que las aplicaciones se conecten a través de la base de datos, mientras se construye el servicio de acceso a la BD
+ 
+ El tiempo de refactorización tiene costo. La gente no está metiendo features en el monolito.
+ Hay que probar los beneficios a largo plazo 
+ 
+ -------------------------------------------------------
+ Iteración N#
+ Sistema dividido en microservicios
+ -------------------------------------------------------
+ Sesión de usuario -> Le pegan muchos servicios, es cross a toda la aplicación
+ 
+ Hay distintas bases de datos especializadas. Ganamos que las bases de datos sean óptimas para cada necesidad, permite usar distintos tipos de BD, como  grafos, relacionales, Cache de REDIS
+ 
+ Aumentó la cantidad de aplicacionas. Todas necesitan un equipo, tienen distintos ciclos de vida, monitoreo y su propio deploy.
+ Si hay un bug, averiguar qué pasó se vuelve complicado.
+ Rastrer un usuario y averiguar qué estuvo haciendo, buscar un request y saber por dónde pasó es complejo
+ 
+ Integraciones por web services -> cada aplicación expone servicios, no hay acceso vía capa de datos. 
+ Si una app es dueña de una BD, nadie debe acceder a ella directamente. 
+ (Ver diagrama en ppt -> solo hay una flecha por BD)
+ Solo un servicio accede a cada base de datos.
+ Le da flexibildad al equipo que trabaja en el servicio, puede buscar la mejor para su servicio y reemplazarla sin afectar a los otros servicios, modificar la BD como quiera
+ 
+ Es muy fácil agregar capas de presentación. Originalmente estaba la de front, pero se puede agregar la de mobile y que acceda a las aplicaciones disponibles.
+ 
+ --------------------------------------------------------
+ Manejo de errores y desborde
+ --------------------------------------------------------
+ ¿Cómo manejo errores entre aplicaciones?
+  Distintas aplicaciones fallan. Si el sistema está muy acoplado, cuando se cae uno la app deja de funcionar. Significa que no se ganó nada con microservicios.
+ Si falla un servicio, el resto de la app debe seguir funcionando
+ 
+ Límites establecidos de carga -> si tenemos un servicio que le pega a una BD y que siempre atiende todos, eventualmente tendremos un pico de carga. Cada aplicación debe tener sus límites de carga, según criticidad
+ 
+ Setear los timeouts entre caja. Si son altos, talvez el navegador haga otro reques mientras que entre los servicios se esté procesando el request cancelado. El sistema desperdicia recurssos por un request que nadie va es esccuchar.
+ 
+ Reintentos -> Hay herramientas de arquietectura para manejar el exceso de request.
+ Como colas o guardar cosas en la BD para ejecutar después, por ej le prometemos al cliente que luego le cambiamos el nombre. El usuario se queda tranquilo y luego l resolvemos.
+ Si atendemos todos los request, probablemente nunca acabemos de escalar.
+ 
+ ----------------------------------------------------------
+ Backpressure -> Si un servicio está caído y los clientes no reaccionan, los errores se propagan por todo el stack.
+ 
+ Ej muchos usuarios quisieron acceder al sistema, una aplicación se puso lenta, y los usuarios se empezaron a encolar
+ 
+ Soluciones
+ -----------
+ Circuit breaker
+ Si una app está caida, la aplicación cliente no envía más request hasta que la primera se recupere
+ 
+ Blacklisted
+ Colas -> entran los usuarios que el sistema soporte. Evita que el usuario presione F5 (genere más requests)
+ 
+ 
+ ----------------------------------------------------------
+ Problemas con microservicios
+ ----------------------------------------------------------
+ Algunas responsabilidades no son tan clara como para determinar si van en una caja u otra
+ Solución, un microservicio se encarga de esa reponsabilidad, que no está muy relacionada con su scope 
+ Generamos otro micrservicio que resuelva la responsabilidad, llamando a los otros dos
+ 
+ Los microservicios se hacen más cohesivos de lo que deberían. 
+ Se generan servicios anémicos, que no hacen nada y todo lo resuelven con varios request (antipattern)
+ 
+ Agrega overhead por saltos y distribución
+ Cada microservicio agrega un salto de red, los tiempos de respuesta al cliente son cada vez más largos
+ La carga interna de red se incrementa. Los microservicios pueden estar deployados en cluster, afectando la carga interna
+ 
+ Redundancia de tarea -> Puede ser necesario llamar al mismo servicio. Dos microservicios pueden llamar al mismo ser servicio, ambos desarrollando tareas parecidas. Esto significa que hubieron dos equipos tratando de entender el mismo problema y crearon soluciones parecidas -> Redundancia
+ 
+ Algunas aplicaciones son invocadas varias veces, desde una misma aplicación, y esto agrega overhead. Ej antes con una aplicación monolítica se hacía un request para pedir los usuarios y luego se calculaba todo, ahora con microservicios la misma app tendrá componentes que hagan un request a usuarios para resolver sus tareas. Se multiplican la cantidad de request iguales.
+ 
+ El sistema se vuelve más complejo, está distribuido. Tiene problemas inherentes a la distóribución.
+ Hay más puntos de fallas. Si una lo hace, todo el sistema puede fallar.
+ Ej una aplicación se cae y todos los microservicios empiezan a dar timeout.
+ Con monolito, la aplicación se caía completa. El usuario se enteraba rápido. Con microservicios, el usuario puede usar normalmente la aplicación, hasta necesitar el componente que falló. Puede generarle frustración. Ej armó un carrito de compra y antes de pagar se entera que no funcionan los pagos.
+ 
+ 
+ Definir la interacción entre aplicaciones(APIs) puede ser engorrosa. Si se define una api, mientras más clientes se tiene, más dificil es cambiarla, porque no sabemos qué tan crítica es a información devuelta para ellos.
+ 
+ Es dificil coordinar entre equipos.
+ Si deseo cambiar la API necesito coordinar con los clientes. Si lo clientes no son parte del equipo, hay que coordinar con ellos.
+ 
+ Si se necesita más información de otra aplicación, hay que coordinar con el otro equipo responsable.
+ 
+
+ Aumenta la complejidad a nivel management.
+ Con microservicios, los equi pos no están informados de todo lo que pasa. Si se hacen reuniones, no van a estar todos, porque se van a hablar de asuntos que no les incunben. Se necesitan coordinadores de equipos.
+ 
+ Es dificil repartir la carga de trabajo. Algunas aplicaciones tienen mucha carga. La cantidad de personas que se requiere varía con el tiempo. Rotar a la gente de proyecto o no darles tareas para hacer, puede hacer que se cambien de empleo.
+ Cambiar a la gente de proyecto es más dificil si el stack de tecnologías usadas no es uniforme.
+ 
+ Manejar transacciones distribuidas es un problemón -> Se requiere mucha coordinación.
+ 
+ Se pierde tiempo porque no se sabe dońde está cada parte del código, hay que coordinar convenciones de código.
+ 
+ Tener equipos pequeños, permite experimentar con distintas tecnologías, pero no hay que excederse, porque si el desarrollador se va, después no ay quién mantenga el código
+ 
+ 
+ Requisitos para usar microservicios
+ --------------------------------------------------------
+ No todas las organizaciones están preparadas para dar el salto
+ 
+ Tener provisionamiento rápido -> si la app puede escalar sin tener que pedirle permisos a otros
+ Si para escalar hay que pasar una burocracia, chequear presupuestos, etc, es mejor tener un monolito
+ 
+ Usar cloud ayuda -> Permite aprovechar la escalabilidad eslástica, porque puede ser más rápido escalar que solucionar el bug. Mientras el equipo lo resuelve, se escala y luego se vuelve a la normalidad. Es una ventaja en microservicios, porque la probabilidad de tener bugs aumenta
+ 
+ Poder escalar cada uno independientemente
+ Tener un load balancer para modificar la carga de manera dinámica 
+ 
+ Herramientas para monitorear. Hay más apps para ver.
+ New Relik (SaaS) -> Permite ver cómo interactuan los microservicios, cuánto tardan en responder, muestra las conexiones entre cada aplicación. 
+ Ej podemos ver qué tan crítico es un servicio según la cantidad de conexiones
+ Permite detectar problemas de perforance
+ 
+ Los equipos deben ser independientes en sus ciclos de vida.
+ Se tienen que completar los ciclos de vida sin intervenciónn externa, no necesitar ayuda de otro equipo. Sino no se puede escalar
+ 
+ El deploy debe ser lo más rápido que se pueda. Si tarda poco en hacerse, una sola persona puede ver si es necesario cambiar algo.
+ El equipo se vuelve más seguro de agregar features.
+ Terminar de hacer un feature y deployarlo rápido hace que el equipo esté más concentrado en la tarea. Si tienen que esperar una semana, hay un context switch muy fuerte
+ 
+ ----------------------------------------------------------
+ Testing
+ ----------------------------------------------------------
+ Necesito poder probar de forma rápida y barata. 
+ Mantener los ambientes actualizados puede ser un dolor de cabeza -> Podemos estar codeando con apis que ya no existen
+ Un ambiente actualiado también pueden hacer romper los tests de otros
+ 
+ Ambiente BETA simple y dinámico. Permitir probar la aplicación lo más cercana a producción
+ 
+ 
+ ----------------------------------------------------------
+ Disponibilidad
+ ----------------------------------------------------------
+ Una aplicación es tan fuerte como su eslabón más débil
+ Si una app falla, hay que saber manejar los fallos. Siempre estar preparado
+ Las aplicaciones crítticas deben tener alta disponibilidad
+ Lo mismo con las BD
+ 
+ 
+ Malas prácticas de microservicios
+ --------------------------------------------------
+ Tener un solo repositorio compartido. Hace perder flexibilidad. Mucha gente tocando lo mismo
+ 
+ Preferir SDK sobre APIs -> 
+ 
+ Tener un ambiente compartido por varios microservicios -> El ambiente en el que se deploya no debe afectar a otros microservicios. Podemos romper todos los test de los demás microservicios
+ 
+ Mensajería sin versionar o no retrocompatible -> evolucionar las apis siempre manteniendolas retrocompatibles -> no siempre se puede hacer, puede hacer la api más tosca de usar
+ --Buena práctica--
+ usar versionado en las apis para tener cambios disruptivos
+ o tener cambios lo más retrocompatibles posibles
+ 
+ Tener servicios olvidados -> En agún momento se puede perder a la gente encargada y nadie podrá mantenerlo.
+ 
+ Diseñar mal las responsabilidades en los microservicios -> si cada vez que hay un cambio, hay que tocar varios repositorios, algo anda mal. Los cambios deben poder hacerse independientemente
+ 
+ 
+  ***************************************************
+ CLASE 9
+ ****************************************************
+ NOSQ
+ 
+ años 56 -> bd de 5mb
+ años 60 -> primeras bd
+ años 70 -> bd relacionales
+ 90 -> bd orientados a objetos Intentan solucionar la diferencia entre el modelo objetos y relacionales
+ 2000 -> amazon, google, facebook crean sus bd que no son relacionales
+ 
+ Historicamente el crecimiento del tamaño de medios de almacenamiento creció exponencialmente
+ 
+ SQL
+ Formas normales -> Evitan la redundancia. Aseguran que se pueda mantener la BD. Ahorran espacio
+ Nos obliga a hacer JOINS, que son operaciones con costo alto, a nivel recursos.
+ Nested loops ->
+ Merge join -> si las tablas están ordenadas, se puede aprovechar para recorrer las tablas una sola vez
+ 
+ 
+ Hash
+ ---------
+ Función para ir de un dominio a otro. 
+ Si no existen colisiones, hay perfect hashing. La imagen debe ser del mismo tamaño que el dominio.
+ 
+ 
+ Un hash es bueno según el problema. Estudiar el costo de las colisiones.
+ 
+ Hash map join -> pasar ambas tablas por la función de hash.
+ Recorre cada tabla una única vez. Si la hash table no entra en memoria, no se puede hacer.
+ Funciona armando grupos más reducidos(buckets) que luego harán jooin entre sí. Hay colisiones y es esperado para armar estos grupos.
+ 
+  ¿Qué es más rápido?
+  Lectura secuencial o lectura aleatoria (RAM)
+  Cache más grande hace más rápido el cache.
+  Agregar cores es cambiar la arquitectura. Es dificil.
+  
+  Porque permite aprovechar toda la cache. El disco tiene una cache.
+  El cache miss tiene un costo altísimo.
+  Para esccribir pasa lo mismo. Escribir secuencialmente es más rápido, tanto en ssds y HDD.
+  Si no es secuencial, hay que poner punteros.
+  
+  BD más eficientemente
+  -------------------------
+  Escribir secencialmente
+  Leer es un scan
+  .... pero no es muy útil
+  
+  Tener un índice
+  .................
+  Hace todo más rápido, pero debo actualizarlo de manera aleatoria, ya no puedo hacer io secuencial.
+  
+  ¿Cómo lo soluciono?
+  Cargo en Ram el índice y mapeo el archivo en memoria.
+  Mapear en memoria es a medida que leo el archivo, se cachea en ram. Escribo en memoria y el sistema operativo se encarga de bajarlo a disco. Es más rápido escribirlo así en ram
+  
+  ¿Quién hace esto?
+  Todas las BDs, cassandra, mongo db, relacionales. 
+  
+  ¿Qué pasa si el índice es muy grande?
+  ------------------------------------------------------
+  Ya no lo puedo tener en memoria y no puedo saber qué parte del índice es útil.
+  A medida quee llegan las escrituras, las junto durante sierto tiempo o cantidaad de transacciones, las ordeno y las guardo en disco. Paso a tener indices más pequeños.
+  Se llama LSMT (Log Structured Merge Trees) 
+  Otro problema...
+  Los índices son más chicos, ¿pero cómo se cuál consutar?
+  
+  Uso un Bloom Filter
+  Bloom filter -> Es una estructura probabilistica que nos dice si un elemento se encuentra o no en un conjunto. Si nos dice cuál elemento se encuentra, puede no ser cierto, pero si dice que no está, es 100% seguro.
+  
+  Tiene la característica de ocupar poco espacio. La probabilidad de un falso positivo es muy baja.
+  Casamiento entre un hashap y un bit map.
+  
+  Volvemos a tener escritura secuencial usando índices grandes. 
+  
+  Perooo, la lectura se vuelve más complicada....
+  
+  Otra opción para hacer JOINS.......
+  Utilizar fuerza bruta.
+  BASES DE DATOS COLUMNARES
+  Todas las columnas de la tabla están en un archivo separado, con las filas ordenadas por la misma key.
+  Permite hacer joins de manera super eficiente porque la lectura es secuencial en los archivos Muy bueno cuando quiero leer rangos o todos.
+  Permite comprimir los datos. Si varios campos son iguales, pongo un marcador que lo indique y evito reescribir el campo.
+  O quizás guardarlo con deltas entre números.
+  Permite evitar leer todas las columnas, se cargan en memoria solo las necesarias. 10 puntos!
+  
+  Un join, aunque tenga un índice, requiere radom IO para la otra tabla con la que voy a joinear. Con archivos se hacen joins secuenciales.
+  
+  
+  ------------------------------------------------------
+  Escalabilidad
+  ------------------------------------------------------
+  Las soluciones anteriores se pueden usar con bases de datos relacionales.
+  
+  ¿Qué otras opciones existen para escalar?
+  #1 Partir la base de datos
+  Para tener más máquinas para almacenarlas.
+  Un hash dice en qué máquina se encuentra la data buscada
+  
+  #2 Dividir la carga
+  Si particiono, puedo dividir la carga. Todas las máquins trabajan al mismo tiempo. Tener colisiones es muy malo. Hace que las BD trabajen innecesariamente.
+  
+  #3 Replicar la data
+  Aumenta de manera automática la capacidad de leer más rápido. Replicar es sencillo. Si leo una de las réplicas, estoy bien. La escritura, dependiendo de la estrategia de replicación puede volverse más lenta.
+  
+  La replicación se vuelve necesaria cuando se usa sharding o cuando la empresa crece mucho, como facebook.
+  
+  
+  ¿Cómo se hace esto de repartir la carga?
+  ------------------------------------------------------
+  
+  Uso un hash que permita repartir la data. Uso un hash value más grande que la cantidad de server.
+  Qué pasa si agrego un server? Tengo que mover toda la data de lugar (aunque no entiendo porqué.....)
+  
+  Solución -> Perfect HASHING
+  El algoritmo se llama así.
+  Ponemos a los servers en un anillo. Cada vez que llega un valor, el hash va a dar un valor entre un intervalo. Me fijo dónde cae y me muevo a la derecha. El primer servidor que encuentro es el que va a responder la request, el que va a guardar el dato. Podría ser un servidor o más si quiero tener replicación.
+  Si se cae un server, los datos van a la derecha del server que se cayó. La cantidad de servidores que son afectados es menor.
+  Si quiero agregar un servidor. La cantidad de data que hay que mover va a ser un porcentaje de la data de los servidores a la izquierda y derecha.
+  
+  La ventaja es que distribuyo menos data
+  Los servers pueden quedar desbalanceados, uno con más carga que otros.
+  La solución es agregar los servers más de una vez en el ring y genero más particiones. Esto en cassandra se llama VNODE/partición.
+  
+  Se afectan a menos servidores si se cae uno o se agrega otro y balancea la carga. No va a ser 100% homogeneo.
+  
+  
+  ¿Cómo funciona la replicación en un ring?
+  ------------------------------------------------------
+  Así funciona cassandra.
+  Escribo en un servidor y este replica la data en el ring
+  
+  Otra opción es tener shards -> todo particionado y que cada partición tenga un master y un slave.
+  
+  
+  
+  ------------------------------------------------------
+  ¿Cómo funciona mongoDB? VER DESPUÉS EN EL VIDEO....
+  ------------------------------------------------------
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  ------------------------------------------------------
+  ¿Qué es Big data?
+  ------------------------------------------------------
+  Los datos cuyo tamaño nos fuerzan a mirar en herramientas no existentes en esa época...
+  
+  SQL vs NOSQL
+  ------------------------------------------------------
+  A las BD NOSQL no les importa estar optimizadas para almacenamiento
+  Hay replicación. Es común tener la data no normaliada
+  En noSQL las querys son fijas porque están optimizadas para una operacóin, en sql se puede hacer cualquier query (AD HOC).
+  En SQL el escalamiento es vertical. Lo único extra es sharding manual. A lo sumo se puede agregar replicamiento para aumenta la tasa de lectura.
+  No sql está pensado para escalar horizontalmente.
+  SQL usa ACID y noSQL usa BASE
+  
+  SQL está pensado para OLAP (online analitic processing)
+  NOSQL está ensado para OLTP (Online transaction processing)
+  Si tengo muchas transacciones pequeñas (lectura, escritura..), nosql funciona muy bien. Las queries son fijas y optimizadas para la tarea.
+  SQL intenta ser bueno para todo.
+  Es hasta ahí. En los 70 ya se usaba sql, en operaciones pequeñitas de insert. 50 cajas dde supermercado, sql se la banca.
+  
+  Nosql es para cantidades ingentes de operaciones.
+  
+  SQL es analiticamente bueno -> Hasta ahí. Si la cantidad de datos es gigantesca (ej todos los habitantes de la tierra) se pone lento pedir datos.
+  
+  
+  ACID vs BASE
+  ------------------------------------------------------
+  
+  -- SQL -> ACID --
+  Atomicidad -> La transacción se ejecuta entera o no se ejecuta
+  
+  consistencia -> La BD pasa de un estado consistente a otro
+  
+  Aislamiento -> Las transacciones no se afectan entre sí
+  
+  Durabilidad -> una vez que termina una transacción, los datos de la misma son almacenados
+  
+  Siempre tengo que estaar en un estado consistente
+  
+  -- NOSQL -> BASIC --
+  
+  Disponibilidad básica -> Disponible la mayor parte del tiempo, no garantizado
+  
+  Soft state -> El estado de la base de datos puede cambiar incluso sin estradas, aunque no haya IO
+  
+  Consistencia eventual -> en algún momento va a ser consistente. Pueden verse datos diferentes
+  
+  Esto es necesario para escalar. NOSQL permite escalar mucho
+  
+  
+  Teorema CAP para Nosql
+  ------------------------------------------------------
+  Dice que solo se puede elegir DOS de tres cualidades
+  - Consistencia -> Todos los clinetes ve lo mismo, aunque hayan insert y updtes
+  (No es la misma consistencia que ACID. Ojo en los finales)
+  
+  - Disponibilidad -> Todos los clientes acceden a los datos, incuso ante la presencia de fallas
+  - Tolerancia a particiones -> El sistema sigue funcionando aunque existan particiones de red
+  
+  
+  Es una mentira...
+  Consistente + tolerante a particiones
+  Disonibilidad + tolerancia a particiones
+  
+  Solo se puede elegir entre esto, si la BD está distribuida. No se  puede dejar de lado la tolerancia a particiones. 
+  
+  
+  Ejemplos de CAP 
+  ------------------------------------------------------
+  Replicación master slave -> Garantiza consistencia.
+  Las lecturas siempre del master  y el slave como backup.
+  O leo del slave cuando le dice al master que el dato está confirmado. 
+  O el slave no deje leer hasta que los otros slaves digan que el dato fue confirmado correctamente.
+  Schema peer to peer
+  cassandra tiene master slaves dentro de un shard, replicación tipo peer to peer
+  
+  Escritura con commit en todos los slaves 
+  
+  -- Tolerancia a particiones --
+  Puedo tener shardings sin replicación, porque quiero escribir mucho. No interesa si se pierden datos.
+  
+  Si hago una, el datos podría no ser correcto. Entonces leo de varios nodos y elijo el mejor de 3. Impar para que se pueda desempatar
+ 
+  
+  
+   
+  ---------------------------------------------------------
+  Tipos de Bases de datos NOSQL
+  ---------------------------------------------------------
+  key value
+  ------------
+  Los datos se alacenan como un par clave valor, como un mapmap gigante.
+  schemaless -> En la versión base, el valor puede ser cualquier cosa
+  No es flexible, solo se puede hacer queries por clave
+  Es extremadamente performante. Se puede repartir la carga fácilmente entre varios servidores.
+  Ej Redis, memcached, dynamoDB
+  
+  Alta performance.
+
+  Para elegir correctaente la key, hay que conocer de antenamo las queries. 
+  
+  Redis --> Bd que permite que el value sea listas, sets, índices, strings, hyperloglog(set que no se puede saber qué tiene y da cuantos elementos hay guardados)
+  
+  Permite hacer operaciones sobre los datos del value, ej incrementar un número, pedir un set y ordenarlo o filtrarlo
+  
+  
+    
+  Wide column 
+  ------------
+  Los datos se almacenan como par clave valor, pero el valor es otra estructura, como un set ordenado o un arbol. Los datos de la estructura no son estructuras. 
+  El value es un índice.
+  
+  Hay un nivel 1ro -> key
+  Y un segundo -> los valores 
+  La key indica la partición en la que se cae. Dentro de la partición está la estructura de datos (value) que tiene los datos que se van a buscar
+  Los datos son schemaless(cualquier tipo de datos)
+  
+  Poco flexibles, solo se puede buscar por el key y por el índice. El índice permite buscar por rangos, por ej.
+  Alta escalanilidad porque se parece a una key value
+  Alta performance, se parece a key value pero ademas tenes otro indice de donde seguir buscando.
+  
+  Ejemplos
+  DynamoDB, Cassandra, Bigtable, scyllaDB, Redis*
+  
+  Cómo se ve?
+  Hay un partition key(puede ser repetido) y un sort key (no puede ser repetido, sroted set en gral.), a su vez puedo fiiltrar por el sort key. Los datos úeden ser cualquier cosa.
+  
+  ¿Por qué la flexibilidad es discutible?
+  Porque se puede hacer cosas locas con algunos features. 
+  Relación muchos a muchos -> doy vuelta la key con la sort key.
+  
+  
+  
+  Columnar 
+  ------------
+  
+  Explicado antes...
+  Los datos se almacenan en un archivo por columna, son eficientes en la compresión porque hay orden.
+  Altamente escalable
+  Alta performance en agregaciones.  
+
+  Ej Parquet (estructura para guardar archivos), Vertica (BD columnar pura)
+  Wide column No es columnar
+  
+
+  
+  Orientadas a documentos
+  ------------
+  Hay colecciones de documentos, donde cada documento tiene estructura jerárquica (en gral. json) y te permite hacer queries sobre cualquier dato en el archivo y armar índices de ellos.
+  Es schemaless -> se puede guardar cualquier tipo de dato
+  Puedo hacer queries por arrays, ej datos georreferenciales
+
+  Extremadamente flexible, query de cualquier cosa
+  son performantes (?).
+
+  Hay que particionar muy muy bien los datos para tener queries buenas. Es el costo de la flexibilidad
+  Son muy utilizadas cuando hay que usar una BD nosql, pero no se conocen todos los requerimientos del negocio y no se sabe qué queries se van a hacer (por ser flexible)
+  
+  Exelente para startups.
+  Más flexible que una BD SQL -> permite agregar muchos índices, aunque sean complejos
+  Shardear es opcional. La BD replica por defecto. Se puede escalar en lectura. No hay problema en sacar o agregar campos.
+  En schemaless, se pueden tener campos que se llaman igual, porque el tipo de datos es distinto 
+    
+  Ej  MongoDB, CouchDB
+  
+  -- Desventajas --
+  
+  Las validaciones deben ir del lado de la aplicación
+  Si se qiere particionar(shardear) hay que elegir bien la key
+  Si la query es incorrecta, se hacen consultas a todas las BD
+  Es un peligro poner datos incorrectos, no hay contro dentro
+  No se puede hacer join, no se sabe a que bd pegarle para conseguir la data, habría que consultar en todos y no es eficiente
+  Si la empresa que lo usa crece y necesita más eficiencia para sus queries, es un dolor desarmarla, porque es una bolsa de gatos, se tira todo adentro.
+  
+  Grafos 
+  ------------
+  No se utilizan mucho
+  Las entidades base son nodos y sus relaciones. Cada uno tiene propiedades, nodo y relación.
+  Permite crear queries semánticas
+  Altamente flexibles, más que una relacional. Permite hacer queries mas complejas que con sql 
+  
+  Ej Neo4J
+  
+  Se ve como un grafo
+  
+  Tiene sentido si se tiene poca data
+  
+  Ej de querie -> Los enemigos de mis amigos que a su vez son mis amigos, a qué cursos se inscribieron los amigos de mis amigos que no haya cursado y que pueda cursar.
+  
+  
+  Permite solucionar problemas interesantes (kevin bacon number)
+  La distancia entre todas las personas es menos de 10 personas
+  
+  
+  -- Problema --
+  
+  No son particionables, todo debe estar conectado. No es fácil
+  Permite replicación
+  
+  
+  Colas (si se persiste en disco)
+  ------------
+  Se usan para transacciones lentas. Que la operación sea procesada cuado se pueda
+  
+  Es siempre hacer un append y leer el final. Se puede leer de forma secuencial, a partir de cierta fecha, por ej.
+  Eficiente
+  
+  ej Kafka
+  
+  Elastic search (documental) -> Porque guarda datos
+  ------------------------
+  
+  
+  
+  ----------------------------------------------------------
+  NewSQL - un nuevo monstruo
+  ----------------------------------------------------------
+  ¿Existe la chance de recuperar lo bueno de SQL?
+  ej cockroachDB -> igual que clud spanner, pero sin rlojes atómicos
+  CloudSpanner (google, usa relojes atómicos. Solucón al problema de quorum con fuerza bruta)
+
+ 
+  ****************************************************
+ CLASE 10
+ ****************************************************
+ SERVICE MESH
+ -------------
+  Microservicios -> Cada aplicación debe ser high available, con cluster
+ A se comunica con B por request http
+ 
+ 
+ ¿Cómo sabe A a qué endpoint mandarle un request?
+ ¿Cómo se qué instancias de B están disponibles?
+ ------------------------------------------------------
+ 
+ 
+ #Solución 1
+ Service registry -> una aplicación que conoce las instancias de B disponibles. Puede hacer chequeos de salud de la instancia (health check o heartbeat)
+ Heartbeat -> la app informa su estaddo de salud
+ Health check -> el service registry pregunta por el estado de salud de la app 
+ Permite activar/desactivar instancias 
+ 
+ up/down --> instancia ejecutando o no
+ Active/not active --> Recibe traico o no
+ 
+ Ej hacer un Rolling Deloy(cambiar la veeersión de la instancia) sin down time -> Desactivar las inatancias UP(no reciben más tráfico), luego bajarlas (down). Deployar de nuevo(nueva versión), ponerlas en up y luego activarlas (dares tráfico)
+ 
+ ¿cómo se registran las instancias nueva?
+ Self-registry -> cada instancia informa al service registry de su existencia
+ 3rd party -> un coordinador externo se encarga
+ 
+ 
+ ¿Cómo routeo el request hasta la instancia activa?
+ ------------------------------------------------------
+ ----------------------------
+ #Solución 1 -> server side
+ ----------------------------
+ El load balancer utiliza el service registry para recibir todos los request y balancearlos entre las instancias habilitadas
+ 
+ 
+ ----------------------------
+ #Solución 2 -> client side
+ ----------------------------
+ A tiene el algoritmo para balancear la carga, está embebido
+ Utiliza el service registry para conocer las instancias habilitadas de B
+ 
+ ¿Cómo se implementa?
+ A) Implemento la lógica para hacer el ruteo en el cliente ad hoc, hardcodeado.
+ -- Desventajas --
+ Es trabajo repetido porque tods las apps clientes lo tienen codeado.
+ Poco eficiente, mucha gente laburando en lo mismo y no aporta al negocio
+ 
+ Error prone -> si uno la caga, me lleno de problemas. Puede tirar el servicio por haccer requests demás.
+ 
+ 
+ B) Biblioteca
+ Se hace  una vez y se reparte entre todos los clientes. Pero surgen preguntas, como en qué lenguaje hacerla. Los microservicios pueden estar desarrollados en distintas tecnologías.
+ ¿Cómo se deploya un fix?
+ Me di cuenta de que hay errores en la biblioteca, ¿cómo hago para que todos tengan la versión sin bugs?
+ Se pierde governance
+ Governance -> en organizaciones grandes, se refiere al control que se tiene sobre el todo, que se defina algo y que se implemente a nivel organiación
+ 
+ ¿Se usa? -> GRPC lo tiene. Para cualquier cosa peer to peer sirve
+ 
+ C) Sidecar proxy/Data plane 
+ 
+ (La totalidad de la solución de arquitectura, con los sidecars y el control plane se llama Service mesh)
+ 
+ Pieza de arquitectura. 
+ Moto con el asiento del pasajero separado
+ Un proceso que corre al lado de la instancia de A, que ayuda con el ruteo. Es un proceso independiente. {puede estar escrito en cualquier lenguaje.
+ Se encarga de manejar todas las comunicaciones, de salida y de entrada. Todo pasa por el, requests entrantes y salientes.
+ La aplicación solo habla con el sidecar proxy, pero piensa que lo hace con B
+ Se complementa con un componente de arquitectura nuevo llamado "Control plane"
+ Cada instancia de microservicio tiene su instancia de sidecar pegado.
+ 
+ Hay un Service Mesh  Control Plane
+ ----------------------------------
+ Maneja los sidecar y da apoyo para saber qué instancias de microservicios exiten. Es como el service registry.
+ Le dice al sidecar cuáles son las instancias (ocasionalmente).
+ 
+ ¿Qué se gana?
+ ---------------
+ No importa la tecnología con la que se hace el sidecar proxy, siempre que se respete el contrato.
+ Si tengo un bug en el dataplane es más fácil encontrarlo que si estuviera en la aplicación.
+ Puedo deployar la versión nueva sin intervención de la app (ciclo de vida independiente)
+ Si actualizo el sidecar, la versión de la aplicación no se modifica.
+ 
+ Permite tener una visión global de toda la arquitectura. Es una pieza propia y puedo poner lo que quiera dentro. Puedo pedirle que loguee los request en un lugar. Es un buen lugar de control porque está en todos lados.
+ 
+ Es más fácil deployar esto que una librería que está en todas las aplicaciones, porque si cambia, hay que deployar todas las apps de nuevo.
+ No es facil porque hay que deployar un proceso que está corriendo en toda la organización. Agrega complejidad porquees un sistema distribuido.
+ Herramienta de ayuda -> Puppet, de infraestructura. Permite manejo global de instancias de sidecar.
+ Load balancer es más sencillo que esto.
+ 
+ Todo lo de la organización pasa por los sidecars, puedo aprovecharlo para agregarle features como métricas de consumo de red, cantidad de request, de tiempos, tamaño de payload... métricas de request y response, cuantas dieron 500, 200, etc.
+ Una hora de laburo y tengo beneficios en todo el sistema.
+ Todos usan el feature gratis.
+ 
+ Diferencia con load balancer -> está distribuido, no es un single point of failure
+ 
+ No sobrecarga la red, porque sidecar y microservicio están en la misma máquina.
+ Hay menos sobrecarga de red. No hay load balancer, el request en red va directamente al microservicio.
+ 
+ ¿Qué se pierde?
+ Un bug en el sidecar afectaría a todos los componentes.
+ 
+ Responsabilidades
+ ¿Qué pongo ahí?
+ Routing, balancing, health check, monitoreo, seguridad (encripción -> la instancia habla plano con el sidecar y este encripta) acceso (indicaé servicios pueden hacer request al servicio del sidecar)
+ Reintentos, timeouts
+ Circuit breaker (ej A puede pegarle n veces a B, si A anda mal, no puede pegarle a otros)
+ Puedo tener cache, ante un mismo request devuelvo la respuesta anterior...
+ 
+ *** Punto de control ideal ***
+ 
+ 
+ Data plane(sidecar) vs control plane (service mesh)
+ ------------------------------------------------------
+ Sidecar -> uno por instancia
+ Control plane -> uno por ecosistema, tiene reglas de ruteo, guia y coordina a los sidecars
+ 
+ 
+ Service Mesh (Tener los sidecars + control plane)
+ ------------------------------------------------------
+ 
+ -- Ventajas --
+ 
+ No requiere cambios en la app (casi porque se agrega un lugar al que hacerle request, pero si todo ya está configurado así, solo cambio el endpoint de las aplicaciones y anda)
+ 
+ Tengo muchas features que puedo agregar, como service discovery, políticas de red, SSL, Configuración de servicios.
+ 
+ Proxies descentralizados
+ No hay un single point of failure.
+ Eliminamos capas de alto tráfico (vs api gateway o load balancer, que se bancan mucho tráfico)
+ Facilita el ciclo de vida/rolling out de nuevos features porque desacoplo la app del sidecar proxy.
+ Facilita resolver políticas cross servicios (retry policies, timeouts, circuit breakers, autenticación, etc)
+ 
+ -- Desventajas --
+ Dependencia implícita de la aplicación.
+ Se cae el sidecar y no anda el sistema
+ 
+ Más dificil razonar sobre el sistema completo. Puedo entender si el problema está en la aplicación o en el sidecar, pero es más dificil entender si el sistema completo tiene un problema. Quizás el problema es la interacción entre aplicación y sidecar, pero es más dificil de ver.
+ 
+ Proxy descentralizado, pero es difil configurar (mil cosas chiquitas por todos lados). Pierdo governance ¿Cómo le digo a todas las instancias que no le peguen a una del servicio B?
+ 
+ Otro punto que puede fallar... ¿Qué pasa si se ccae el sidecar?
+ 
+ 
+ 
+ 
+ 
+ 
+ ----------------------------------------------------------
+ SERVERLESS
+ ----------------------------------------------------------
+ ¿Qué es?
+ Un servidor transparente. Se usa un servicio que da la infraestructura. Diferente a IAAS y PAAS. Más efímero.
+ 
+ ---
+ Las arquietecturas serverless son diseños de aplicaciones que incorporan servicios de terceros y/o incluyen ejecución de código personalizada, en contenedores efímeros en una plataforma FAAS (Function as a service).
+ Usando estas ideas y otras relacionadas como single page applications, estas arquitecturas se reduce la necesidad de tener un server siempre encendido. 
+ Una arquitectura serverless puede beneficiarse de la reducción de costos de operación , complejidad y palzos de entrega, al precio de aumentar el acoplamiento con el proveedor del servicio FAAS y servicios de soporte aún inmaduros.
+ 
+  - Martin Fowler -
+ ---
+ Es código propio que corre en plataforma de terceros sobre containers efímeros como FAAS
+ 
+ 
+ 
+ Una función que hace algo muy específico, la ttiro en un servidor de terceros que le provee todo lo que necesita para que ejecute. Usamos FAAS. 
+ Es como una query, generar un reporte, un código qr, una tarea muy específicas.
+ 
+ El server esperando todo el tiempo ya no es tan necesario
+ 
+ -- Desventaja --
+ Hay un acoplamiento fuerte con el proveedor. Fuerte vendor locking
+ 
+ 
+ 
+ Antes de serverless
+ -------------------------------------
+ Todo aprovisionado por nosotros
+ El server corriendo la mayor parte del tiempo, permanece activo.
+ Aún en cloud, hay que administrar la cantidad de instancias
+ Mantener actualizado el servidor (IAAS)
+ Estrategias de esaclabilidad -> somos responsbles de esto, cloud o no. Indicamos cuándo crear instancias
+ Failover
+ Monitorear el estado del server
+ Inspeccionar el server ante errores -> Hay que ser más pillo capturando los logs y estudiandolos. En serverless la herramienta es provista 
+ +tareas = + tiempo = + plata -> se necesita un equipo y tiempo
+ 
+ 
+ ¿Por qué usar serverless?
+ 
+ Simplifica la operatoria IT -> No se manejan servidores, no manejamos los tipos de instancia, no elegimos las máquinas como en cloud. Solo entregamos u código y pedimos que se ejecute los mejor posible. No importa dónde y cómo.
+ Nos dedicamos a lo que aporta al negocio. La infraestructura no hace crecer el negocio. 
+ 
+ Alta escalbilidad desde el momento cero -> Si tengo una startup es recomendable usar serverles, hay menos tareas para hacer, se sale más rápido al mercado. Montar un servidor, pagarle a amazon es mucho para alguien que empieza.
+ 
+ Altas chances de psar la crisis de crecimiento. 
+ No tenemos que armar un plan de escalabilidad, lo planifica el proveedor.
+ 
+ Bajo costo -> pago por uso, por request. Acompaña economicamente al negocio y su crecimiento.
+ 
+ Confiabilidad -> Arrancamos con la tecnología que usan los grandes.
+ 
+ Una función no afecta a otra con el uso de recursos. 
+ 
+ 
+ ¿Dónde usar serverless?
+ 
+ Las cosas que se piden son simples, request que debe devolver algo.
+ Ciclo de vida -> Cold start la función se carga en memoria, luego ejecuta y tiene un stand by cortito, por si le hacen otro request a la función, luego se baja.
+ Si está baja y llega una query y vuelve a levantarse.
+ Vive y muere, en un ciclo
+ 
+ Si se manejan más los time outs y cuánto dura. Si las tareas son pesadas no es recomendable.
+ El proveedor de FAAS cobra por tiempo de uso. Si algo da timeout, va a cobrar por algo que no anda.
+ 
+ Es para cosas muy puntuales (ej levantar una api simple). Es fácil cagarla.
+ Primer recomendación "no usarlo"
+ 
+ 
+ -- Ventajas -- 
+ Se paga por uso
+ Se compra procesamiento, mejor estimación de costos
+ Built-in elasticity -> escalamiento elástico por defecto
+ Event driven model -> el sistema está armado a eventos. Lo malo es que si una función da time out, las que haya llamado no van a hacer nada
+ Microservicios - componentes deployables separados
+ Inmutable -> el código en el servidor no puede ser modificado
+ Aislamiento -> si una query está mal optimizada y usa mal los recuro, no afecta a las otras funciones. Si al sistema 
+ Políglota -> puede serr programado en muchos lenguajes. Está bueno o malo, según el uso. Se puede usar la tecnología que más se adapta al problema, pero si se usan muchas, va a ser necesario tener expertos en cada una.
+ Stateless -> Sin estado. Ejecuta y muere.
+ Tolerante a fallos por defecto
+ Alta dispoibilidad (HA) por defecto
+ 
+ 
+ -- Desventajas --
+ Se pierde governance -> Cómo se hace para deployar lo mismo en todo. 
+ Complejo (+ deploys, + apis, + fallos de red) -> todo es más chiquito
+ Lock-in -> acoplados al proveedor
+ Limitaciones ->timeout establecidos por el proveedor, máximo de memoria, deploy size
+ Tests de integración complejos -> los mismos problemas que microservicios, pero peor. Muchos más componentes chiquitos
+ Debugging -> complicado, porque debbuggear en producción no se puede
+ Observabilidad -> no se puede ver dentro del contenedor (no como en docker). Hay que ver cómo monitorear los logs, los tiempos de respuesta...
+ Cold star problem -> tiempo en que tarda levantar la aplicación. Una vez levantado, no tarda tanto
+ Orquestación compleja -> cómo mantener la armonía
+ 
+ 
+ Un ejemplo de uso...
+ Generador de stamps (imágenes chiquitas) -> ajustar la imagen para hacer miniaturas. 
+ Hay CDNs que lo hacen, pero con FAAS manejamos las imágenes 
+ server side rendering
+ api gateway, transformar los datos antes
+ 
+ -------------------------
+ Serverless framework
+ -------------------------
+ Abstrae del vendor locking
+ 
+ 
+ 
+ 
+ 
+  ****************************************************
+ CLASE 11
+ ****************************************************
+ SRE
+ ---
+ Service Reliability Engineering
+ Proceso ingenieril para mantener la confianza en los servicios
+ 10 años atrás nacen los 
+ ----------
+ Sys Admin
+ ----------
+ Se encargan del
+ Service Management(operaciones del sistema) -> Relacionado con todo lo que no es código, como deployar. Monitoreo, métricas, fallbacks, escalado, resiliencia, operan el sistema en vuelo
+ Administran los servicios
+ 
+ Tienen un costo asociado -> La cantidad de gente necesaria para operar el sistema crece linealmente con el sistema(directo)
+ Costo indirecto por el gap entre desarrollo y operación. El set de skills es distintos, un codea y no tienen idea de cómo levantar el server, el equippo sys admin están más cerca del fierro y la infraestructura, lunux, vm, load balancers... Es dificil alinear los equipos.
+ La terminología es distinta -> uno habla de instancias y otro de máquinas - cuotas
+ Tienen distintas suposiciones de estabilidad de un producto -> para un sys admin, estable es un sistema que no se cae, para el otro es que pase los test y que pase el circuito de integración continua.
+ 
+ Uno se ocupa solo de los test de integración. El otro vela porque no se caiga.
+ 
+ 
+ Sysadmin es responsable de una caja negra, genera tensión porque van a ser retisentes a que se cambie el sistema.
+ El desalrrollador genera features y necesita camiar el sistema.
+ 
+ -------
+ DevOps
+ -------
+ Balancea los objetvos de un SysAdmin y un desarrollador.
+ Conjunto de praćticas, es una cultura, enfocada en reducir el time to market (deployar rápido) y que el sistema se mantenga andando. Hay que aceptar que el sistema se va a romper, pero debemos garantizar una recuperación rápida.
+ 
+ Para bajar el time to market -> se enfoca en reducir el ATTR (tiempo promedio de recuperación)
+ 
+y el ATTF (tiempo promedio entre fallas) -> ej para no afectar a todo el sistema se usa un canary deploy, tener redundancia...
+
+menos deply -> más cambio se juntan. Es mejor deployar todos los días, los cambios van a ser más chicos.
+
+Implementar cambios graduales
+
+Tener mecanismo para deployar, pausar el tráfico, hacer migración, bajar una palanca para que deje de llegar tráfico.
+
+Service mesh está relacionado con esto.
+
+Antes de hacer algo, tener medicón. Tener sistemas de métricas y compartirlas con el equipo.
+
+------------------------
+RCA -> root cause analisys
+reunión en la que se intenta entender el problema
+
+Post Mortem -> reunirse para pensar qué pasó, cómo evitar que vuelva apasar. Reunión de los involucrados. Armado de línea de tiempo del suceso.
+Estudiar la métricas por versión de servicio.
+------------------------
+
+ 
+ -------------------------------
+ Service reliability Engineering
+ -------------------------------
+ Métodología de trabajo de Google a partir de los principios DevOps. Implementa esos principios de una manera optimizada.
+ 
+ Super opinionated -> Es lo que Google cree que funciona mejor en sus sistemas. 
+ Pero le puede servir a cualquier empresa
+ 
+ Objetivo -> Utilizar el error budget para obtener la máxima velocidad de entrega de features (time to market)
+ 
+ Principios
+ -----------
+ Reliability(la confianza) es lo más importante. Sin usuarios, lo de más no tiene sentido.
+ Los usuarios miden la confianza.
+ 
+ Se mide en 
+ dólares -> si se cae el servicio
+ Bajan las ventas
+ En otros mercados, puede perderse plata, confianza del cliente e imagen. 
+ 
+ Uptime -> tiempo de funcionamiento del sistema.
+ Hacer que un sistema sea 100% disponible es imposible. Es muy complejo de lograr. Cada vez que se agrega un 9 al porcentaje, el costo crece de manera exponencial.
+ 
+ Pensar un uptime diferente por flujos.
+ 
+ 
+ Error budget -> 100% - Objetivo de disponibilidad
+ Significa el porcentaje máximo de no disponibilidad
+ Un valor más bajo implica hacer cambios con mucho cuuidad. El desarrollo empieza a complicarse. El time to market se ve afectado.
+ 
+ Sirve para validar el CONTROL LOOP (Acelerar o frenar el trabajo según el Error budget disponible)
+ Ej El error budget permitía 10hs con el sistema caido, pero llevamos 8hs, no podemos seguir deployando. Debemos robustecer el sistema para bajar el ATTR y ATTF.
+ 
+ Hay casos en los que no vale la pena aumentar el uptime, porque el entorno del sistema no lo permite. Ej versión mobile de una app, la experiencia está limitada por la red 4G.
+ 
+ Ayuda a decidir la cantidad de releases habrá
+ 
+ Términos
+ ---------
+ #SLI - Service level indicator
+ Indica el estado de salud del servicio. 
+ Si el request salió bien y tardó un tiempo aceptable.
+ Succesful enough
+ Promedio en una ventana de tiempo
+ 
+ Puede ser latencia de request, tasa de error, throughput
+ 
+ #SLO - Service level objective
+ Se define con el SLI. Es un rango de tiempo.
+ OBJETIVO de interacciones exitosas
+ lim. inf <= SLI <= lim. sup.
+ 
+ Si un servicio es muy rápido trae problemas. Quiázas no agrega ningún benefico. Los  usuarios se acostumbran, y si luego el servicio tarda un poco más ...
+ Es necesario, porque sino se cree que el servicio podría no fallar y no se prepara entrategias para responder(fallback). Siempre ser consciente de que el servicio puede fallar. 
+ También indica el máximo de esfuerzo que se puede invertir en mejorar el uptime. 100% no vale la pena. Le quita tiempo al equipo y recursos a la organización($).
+ Si tarda mucho, genera reintentos y acumula tráfico de red
+ 
+ Define un objetivo claro para evitar hacer sobreingeniería.
+ Define el esfuerzo máximo a invertir y que tan drástica tienen que ser la solución
+ SLO se calcula según el daño soportado por el negocio ($$$)
+ Es distinto para cada servicio
+ 
+ En general se mide en percentiles (ej 90% de los request se responden en 1ms)
+ Los promeddios son enagañosos porque no muestran la distribución.
+ 
+ #SLA - Service level
+ Relacionado con el SLO.
+ Tiene que ver con contratos. Es una garantía de tiempo uptime.
+ SLA = SLO + margen de seguridad
+ 
+ Si no se cumple, hay problema legales.
+ Requiere equipos legales y de negocio para elegir las consecuencias y las penalidades adecuadas.
+ 
+ ---------------------------------------------
+ Error budgets y SLO previenen la fatiga de intuición. A veces es difícil decir que algo no está bien. Son indicadores de salud e indica cuando parar o acelerar.
+ Permiten tener un lenguaje común con la gente de negocio. Son indicadores económicos, acordados con la gente de finanzas. Se deciden según cuánto afecten a las ganancias o al producto.
+ 
+ freeze -> si no hay error budgets, ya no meter features. Hay que reducir los indicadores ATTR y ATTF.
+ Minimizar el impacto y el riesgo.
+ 
+ 
+ -----------------------------------------------------------
+ ¿Cómo empezar a implementar SRE?
+ -----------------------------------------------------------
+ 0) Voluntad, confianza en que esto va a mejorar el uptime o el time to market.
+ Apoyo ejecutivo.
+ 1) Una aplicación a la vez. Una app no es un microservicio, sino un dominio discreto de fallas.
+ Ej si una BD afecta al login. El login es el frontend, la api de sesiones y la BD de las sesiones. Todo esto es un single failure domain. Si se cae uno, afecta todo esto.
+ Medir todo, la api, la bd, agrego monitoreo punta a punta
+ 
+ 2) Empezar definiendo el Error budget
+ Si se hace al principio iran funcionando por sí mismas
+ 
+ 3) Obtener métricas (lo rpimero que es a nivel código)
+ Logs de punta a punta.
+ 
+ ¿Cómo reduzco el ATTR?
+ Con alertas, críticas. Si llegan muchas, quita el foco de atención. Ej Desvelarse cansa a la gente. Si algo puede esperar, espera...
+ Pensar cómo evitar que vuelva a sonar.
+ 
+ Esta carga operativa la debe hacer una o dos perrsonas a la vez. El resto del equipo debe seguir enfocado en features, otros en guardia. Sino el equipo se frustra.
+ 
+ 4) Blameless culture
+ Postmortem no es para buscar a quién hecharle la culpa, sino para entender porqué permitió errores y evitar que vuelva a pasar.
+ 
+ Pensar automatizaciones para reducir el time to market.
+ 
+ 5) No intentar hacer todo a la vez
+ Servicio por servicio
+ Definir SLI, SLO, Error budget. Auditar y ajustar monitoreo y alertas. Modelar y compensar blameless postmortem.
+ 
+ 
+ Si se hace todo a la vez, puede fallar y se va a perder la voluntad de implementar SRE
+ 
+ 
+ ----------------------------------------------------------
+ Embracing Risks - Aceptar el error (parte de SRE)
+ ----------------------------------------------------------
+ ¿Cómo se hace?
+ La confiabilidad tiene costo. Herramienta, tooling, monitoreo. Es un costo de oportunidad porque en lugar de agregar cosas de valor para el negocio, se robustece. Por eso se debe aceptar el error.
+ 
+ SLO -> se define con el nivel de servicio que espera el usuario, si el servicio está atado al revenue nuestro o de  nuestro clientes, precio de servicio(distinto SLO para versiones gratuitas)
+ Si hay competidores, qué SLA proveen?
+ ¿Para usuarios finales o empresas?
+ 
+ Cada producto tiene un target de disponibilidad y error budget.
+ 
+ 
+ SRE trabaja codo a codo con desarrollo de producto
+ 
+ 
+ ----------------------------------------------------------
+ Otros principios de SRE
+ ----------------------------------------------------------
+ Eliminar tareas manuales y automatizar. Para mejorar el tiempo de respuesta
+ Monitorear sistemas distribuidos.
+ Ingeniería de realese. Deploy, blue green, canary...
+ Simplicidad
+ 
+ 
+  ****************************************************
+ CLASE 12
+ ****************************************************
+
+
